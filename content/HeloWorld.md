@@ -14,21 +14,21 @@ Para hospedar o blog optei por utilizar o [GitHub Pages](https://pages.github.co
 
 Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o [Anaconda](https://www.anaconda.com/) para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):
 
-`$$ conda create -n pelican-env python=3.6`
+    $ conda create -n pelican-env python=3.6
 
 Ative o ambiente virtual:
 
-`$$ source activate pelican-env`
+    $ source activate pelican-env
 
 Com o ambiente virtual ativo instale o Pelican e o Markdown com o pip:
 
-`$$ pip install pelican markdown`
+    $ pip install pelican markdown
 
 No GitHub é necessário criar um novo projeto e seu nome deve ser **username-do-github.github.io**. No seu diretório de projeto crie um diretório com este mesmo nome.
 
 Dentro deste novo diretório gere o projeto pelo Pelican:
 
-`$$ pelican-quickstart`
+    $ pelican-quickstart
 
 Este script realiza algumas perguntas para gerar o website:
 
@@ -46,32 +46,33 @@ Este script realiza algumas perguntas para gerar o website:
 
 Pronto! O projeto já está disponível em seu diretório.
 
-### Versionamento
+
+## Versionamento
 
 Agora que o projeto está pronto é necessário iniciar o versionamento com git e adicionar o repositório remoto.
 
-`$$ git init`
-`$$ git remote add origin git@github.com:username-do-github/username-do-github.github.io.git`
+    $ git init
+    $ git remote add origin git@github.com:username-do-github/username-do-github.github.io.git
 
 É necessário organizar o projeto em 2 branchs:
 
 * **pelican**: os arquivos e códigos que gerarão o site estático.
 * **master**: os arquivos estáticos gerados;
 
-`$$ git checkout -b pelican`
-`$$ git add .`
-`$$ git commit -m 'iniciando branch pelican'`
-`$$ git push origin pelican`
+    $ git checkout -b pelican
+    $ git add .
+    $ git commit -m 'start pelican branch'
+    $ git push origin pelican
 
 Para publicar o conteúdo estático na branch master é necessário utilizar o **ghp-import**:
 
-`$$pip install ghp-import`
+    $ pip install ghp-import
 
 E finalmente para gerar o site estático é só utilizar o **make**:
 
-`$$make github`
+    $ make github
 
-### Para configurar um domínio personalizado
+## Para configurar um domínio personalizado
 
 Este passo é opcional, caso deseje utilizar um domínio próprio.
 
@@ -83,5 +84,34 @@ Em **pelicanconf.py** adicione as seguintes linhas:
     EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
 
 
+## Para fazer o primeiro post
 
+Para criar um post é só criar um arquivo markdown no diretório content, com a seguinte estrutura:
+
+    Title: Título do post
+    Date: yyyy-mm-dd hh:mm
+    Modified: yyyy-mm-dd hh:mm
+    Category: Categoria
+    Tags: tag, tag, tag
+    Slug: link-amigavel
+    Authors: Nome do autor
+    Summary: Resumo do Post
+
+    Conteúdo, lembrando de usar markdown!
+
+Por fim é necessário utilizar o git para fazer o commit das alterações, enviar para o repositório no GitHub e publicar o post:
+
+    $ git add . 
+    $ git commit -m 'first post' 
+    $ git push origin pelican 
+    $ make github
+
+Fontes:
+
+[Criando um blog com Python pelican GitHub Pages e dominio personalizado](http://fnscoder.com/criando-um-blog-com-python-pelican-github-pages-e-dominio-personalizado.html)
+[Making a static blog with Pelican](http://nafiulis.me/making-a-static-blog-with-pelican.html)
+[Create a blog with Pelican and GitHub Pages](https://rsip22.github.io/blog/create-a-blog-with-pelican-and-github-pages.html)
+[Configure a custom domain name with Pelican and Github Pages](http://cherrymick.com/configure-a-custom-domain-name-with-pelican-and-github-pages.html)
+[Criando sites estaticos com Pelican](http://pythonclub.com.br/criando-sites-estaticos-com-pelican.html)
+[Docs Pelican](http://docs.getpelican.com/en/3.6.3/tips.html)
 
