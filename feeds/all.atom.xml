@@ -1,5 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Eliézer Bourchardt Personal Blog</title><link href="http://eliezerfb.eti.br/" rel="alternate"></link><link href="http://eliezerfb.eti.br/feeds/all.atom.xml" rel="self"></link><id>http://eliezerfb.eti.br/</id><updated>2018-03-31T15:00:00-03:00</updated><entry><title>Um blog com Python, Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o Pelican.
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Eliézer Bourchardt Personal Blog</title><link href="http://eliezerfb.eti.br/" rel="alternate"></link><link href="http://eliezerfb.eti.br/feeds/all.atom.xml" rel="self"></link><id>http://eliezerfb.eti.br/</id><updated>2018-03-31T15:00:00-03:00</updated><entry><title>Um blog com Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o &lt;a href="http://docs.getpelican.com/en/stable/"&gt;Pelican&lt;/a&gt;.
 O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é necessário utilizar outras ferramentas como Django, Web2Py ou Wordpress. Como não precisa utilizar banco de dados (é apenas HTML estático) o conteúdo do blog fica em documentos de texto, facilitando qualquer futura migração.&lt;/p&gt;
-&lt;p&gt;Para utilizar o Pelican é recomendado criar um ambiente virtual. Como eu já utilizo o Anaconda (https://www.anaconda.com/) o utilizei para criar o ambiente:&lt;/p&gt;
-&lt;p&gt;conda create -n pelican-env python=3.6&lt;/p&gt;</content><category term="pelican"></category><category term="publishing"></category><category term="web"></category></entry></feed>
+&lt;p&gt;Para hospedar o blog optei por utilizar o &lt;a href="https://pages.github.com/"&gt;GitHub Pages&lt;/a&gt;. É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.&lt;/p&gt;
+&lt;p&gt;Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o &lt;a href="https://www.anaconda.com/"&gt;Anaconda&lt;/a&gt; para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ conda create -n pelican-env python=3.6&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Ative o ambiente virtual:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ source activate pelican-env&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Com o ambiente virtual ativo instale o Pelican e o Markdown com o pip:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ pip install pelican markdown&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;No GitHub é necessário criar um novo projeto e seu nome deve ser &lt;strong&gt;username-do-github.github.io&lt;/strong&gt;. No seu diretório de projeto crie um diretório com este mesmo nome.&lt;/p&gt;
+&lt;p&gt;Dentro deste novo diretório gere o projeto pelo Pelican:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ pelican-quickstart&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Este script realiza algumas perguntas para gerar o website:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Título do seu site.&lt;/li&gt;
+&lt;li&gt;Nome do autor.&lt;/li&gt;
+&lt;li&gt;Idioma padrão.&lt;/li&gt;
+&lt;li&gt;Se deseja utilizar uma URL personalizada.&lt;/li&gt;
+&lt;li&gt;URL personalizada (se informado Y na opção acima).&lt;/li&gt;
+&lt;li&gt;Habilitar paginação nos posts.&lt;/li&gt;
+&lt;li&gt;Fuso horário (deixe America/Sao_Paulo)&lt;/li&gt;
+&lt;li&gt;Do you want to generate a Fabfile/Makefile to automate generation and publishing? Y - Esta opção facilita a geração do site, pois automatiza a sua geração e publicação.&lt;/li&gt;
+&lt;li&gt;Recarregamento automático do server em desenvolvimento (informe Y).&lt;/li&gt;
+&lt;li&gt;As próximas perguntas se referem onde você vai deixar hospedado (FTP, SSH, Dropbox, S3, Rackspace e GitHub Pages), responda Y apenas para GitHub Pages.&lt;/li&gt;
+&lt;li&gt;Is this your personal page (username.github.io), informe Y para confirmar.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Pronto! O projeto já está disponível em seu diretório.&lt;/p&gt;
+&lt;h3&gt;Versionamento&lt;/h3&gt;
+&lt;p&gt;Agora que o projeto está pronto é necessário iniciar o versionamento com git e adicionar o repositório remoto.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$ git init&lt;/code&gt;
+&lt;code&gt;$$ git remote add origin git@github.com:username-do-github/username-do-github.github.io.git&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;É necessário organizar o projeto em 2 branchs:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;pelican&lt;/strong&gt;: os arquivos e códigos que gerarão o site estático.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;master&lt;/strong&gt;: os arquivos estáticos gerados;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;$$ git checkout -b pelican&lt;/code&gt;
+&lt;code&gt;$$ git add .&lt;/code&gt;
+&lt;code&gt;$$ git commit -m 'iniciando branch pelican'&lt;/code&gt;
+&lt;code&gt;$$ git push origin pelican&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Para publicar o conteúdo estático na branch master é necessário utilizar o &lt;strong&gt;ghp-import&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$pip install ghp-import&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;E finalmente para gerar o site estático é só utilizar o &lt;strong&gt;make&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$$make github&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;Para configurar um domínio personalizado&lt;/h3&gt;
+&lt;p&gt;Este passo é opcional, caso deseje utilizar um domínio próprio.&lt;/p&gt;
+&lt;p&gt;Dentro de /content crie um diretório chamado &lt;strong&gt;extra&lt;/strong&gt;. Neste diretório crie um arquivo chamado &lt;strong&gt;CNAME&lt;/strong&gt; com o nome de seu domínio.&lt;/p&gt;
+&lt;p&gt;Em &lt;strong&gt;pelicanconf.py&lt;/strong&gt; adicione as seguintes linhas:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;STATIC_PATHS = [&amp;#39;extra/CNAME&amp;#39;]
+EXTRA_PATH_METADATA = {&amp;#39;extra/CNAME&amp;#39;: {&amp;#39;path&amp;#39;: &amp;#39;CNAME&amp;#39;},}
+&lt;/pre&gt;&lt;/div&gt;</content><category term="pelican"></category><category term="publishing"></category><category term="web"></category></entry></feed>

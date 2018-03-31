@@ -21,7 +21,7 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/blog-python-pelican.html">Um blog com Python, Pelican e Github Pages</a></h1>
+                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/blog-python-pelican.html">Um blog com Pelican e Github Pages</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2018-03-31T15:00:00-03:00">
                 Published: Sáb 31 março 2018
@@ -36,10 +36,57 @@
         </address>
 <p>In <a href="http://eliezerfb.eti.br/category/python.html">Python</a>.</p>
 <p>tags: <a href="http://eliezerfb.eti.br/tag/pelican.html">pelican</a> <a href="http://eliezerfb.eti.br/tag/publishing.html">publishing</a> <a href="http://eliezerfb.eti.br/tag/web.html">web</a> </p>
-</footer><!-- /.post-info --><p>Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o Pelican.
+</footer><!-- /.post-info --><p>Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o <a href="http://docs.getpelican.com/en/stable/">Pelican</a>.
 O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é necessário utilizar outras ferramentas como Django, Web2Py ou Wordpress. Como não precisa utilizar banco de dados (é apenas HTML estático) o conteúdo do blog fica em documentos de texto, facilitando qualquer futura migração.</p>
-<p>Para utilizar o Pelican é recomendado criar um ambiente virtual. Como eu já utilizo o Anaconda (https://www.anaconda.com/) o utilizei para criar o ambiente:</p>
-<p>conda create -n pelican-env python=3.6</p>                </article>
+<p>Para hospedar o blog optei por utilizar o <a href="https://pages.github.com/">GitHub Pages</a>. É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.</p>
+<p>Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o <a href="https://www.anaconda.com/">Anaconda</a> para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):</p>
+<p><code>$$ conda create -n pelican-env python=3.6</code></p>
+<p>Ative o ambiente virtual:</p>
+<p><code>$$ source activate pelican-env</code></p>
+<p>Com o ambiente virtual ativo instale o Pelican e o Markdown com o pip:</p>
+<p><code>$$ pip install pelican markdown</code></p>
+<p>No GitHub é necessário criar um novo projeto e seu nome deve ser <strong>username-do-github.github.io</strong>. No seu diretório de projeto crie um diretório com este mesmo nome.</p>
+<p>Dentro deste novo diretório gere o projeto pelo Pelican:</p>
+<p><code>$$ pelican-quickstart</code></p>
+<p>Este script realiza algumas perguntas para gerar o website:</p>
+<ol>
+<li>Título do seu site.</li>
+<li>Nome do autor.</li>
+<li>Idioma padrão.</li>
+<li>Se deseja utilizar uma URL personalizada.</li>
+<li>URL personalizada (se informado Y na opção acima).</li>
+<li>Habilitar paginação nos posts.</li>
+<li>Fuso horário (deixe America/Sao_Paulo)</li>
+<li>Do you want to generate a Fabfile/Makefile to automate generation and publishing? Y - Esta opção facilita a geração do site, pois automatiza a sua geração e publicação.</li>
+<li>Recarregamento automático do server em desenvolvimento (informe Y).</li>
+<li>As próximas perguntas se referem onde você vai deixar hospedado (FTP, SSH, Dropbox, S3, Rackspace e GitHub Pages), responda Y apenas para GitHub Pages.</li>
+<li>Is this your personal page (username.github.io), informe Y para confirmar.</li>
+</ol>
+<p>Pronto! O projeto já está disponível em seu diretório.</p>
+<h3>Versionamento</h3>
+<p>Agora que o projeto está pronto é necessário iniciar o versionamento com git e adicionar o repositório remoto.</p>
+<p><code>$$ git init</code>
+<code>$$ git remote add origin git@github.com:username-do-github/username-do-github.github.io.git</code></p>
+<p>É necessário organizar o projeto em 2 branchs:</p>
+<ul>
+<li><strong>pelican</strong>: os arquivos e códigos que gerarão o site estático.</li>
+<li><strong>master</strong>: os arquivos estáticos gerados;</li>
+</ul>
+<p><code>$$ git checkout -b pelican</code>
+<code>$$ git add .</code>
+<code>$$ git commit -m 'iniciando branch pelican'</code>
+<code>$$ git push origin pelican</code></p>
+<p>Para publicar o conteúdo estático na branch master é necessário utilizar o <strong>ghp-import</strong>:</p>
+<p><code>$$pip install ghp-import</code></p>
+<p>E finalmente para gerar o site estático é só utilizar o <strong>make</strong>:</p>
+<p><code>$$make github</code></p>
+<h3>Para configurar um domínio personalizado</h3>
+<p>Este passo é opcional, caso deseje utilizar um domínio próprio.</p>
+<p>Dentro de /content crie um diretório chamado <strong>extra</strong>. Neste diretório crie um arquivo chamado <strong>CNAME</strong> com o nome de seu domínio.</p>
+<p>Em <strong>pelicanconf.py</strong> adicione as seguintes linhas:</p>
+<div class="highlight"><pre><span></span>STATIC_PATHS = [&#39;extra/CNAME&#39;]
+EXTRA_PATH_METADATA = {&#39;extra/CNAME&#39;: {&#39;path&#39;: &#39;CNAME&#39;},}
+</pre></div>                </article>
             </aside><!-- /#featured -->
         <section id="extras" class="body">
                 <div class="blogroll">
