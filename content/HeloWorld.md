@@ -97,7 +97,9 @@ Para criar um post é só criar um arquivo markdown no diretório content, com a
     Authors: Nome do autor
     Summary: Resumo do Post
 
-    Conteúdo, lembrando de usar markdown!
+    Conteúdo, lembrando de usar Markdown!
+
+Dica: para editar o código em Markdown vale a pena olhar estes editores: [editor.md](https://pandao.github.io/editor.md/en.html) ou [markdown editor](https://jbt.github.io/markdown-editor/)
 
 Por fim é necessário utilizar o git para fazer o commit das alterações, enviar para o repositório no GitHub e publicar o post:
 
@@ -109,9 +111,14 @@ Por fim é necessário utilizar o git para fazer o commit das alterações, envi
 Fontes:
 
 [Criando um blog com Python pelican GitHub Pages e dominio personalizado](http://fnscoder.com/criando-um-blog-com-python-pelican-github-pages-e-dominio-personalizado.html)
+
 [Making a static blog with Pelican](http://nafiulis.me/making-a-static-blog-with-pelican.html)
+
 [Create a blog with Pelican and GitHub Pages](https://rsip22.github.io/blog/create-a-blog-with-pelican-and-github-pages.html)
+
 [Configure a custom domain name with Pelican and Github Pages](http://cherrymick.com/configure-a-custom-domain-name-with-pelican-and-github-pages.html)
+
 [Criando sites estaticos com Pelican](http://pythonclub.com.br/criando-sites-estaticos-com-pelican.html)
-[Docs Pelican](http://docs.getpelican.com/en/3.6.3/tips.html)
+
+[Docs Pelican 3.6.3](http://docs.getpelican.com/en/3.6.3/tips.html)
 
