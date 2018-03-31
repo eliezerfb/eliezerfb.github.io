@@ -45,14 +45,26 @@
 O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é necessário utilizar outras ferramentas como Django, Web2Py ou Wordpress. Como não precisa utilizar banco de dados (é apenas HTML estático) o conteúdo do blog fica em documentos de texto, facilitando qualquer futura migração.</p>
 <p>Para hospedar o blog optei por utilizar o <a href="https://pages.github.com/">GitHub Pages</a>. É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.</p>
 <p>Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o <a href="https://www.anaconda.com/">Anaconda</a> para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):</p>
-<p><code>$$ conda create -n pelican-env python=3.6</code></p>
+<div class="highlight"><pre><span></span>$ conda create -n pelican-env <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.6
+</pre></div>
+
+
 <p>Ative o ambiente virtual:</p>
-<p><code>$$ source activate pelican-env</code></p>
+<div class="highlight"><pre><span></span>$ <span class="nb">source</span> activate pelican-env
+</pre></div>
+
+
 <p>Com o ambiente virtual ativo instale o Pelican e o Markdown com o pip:</p>
-<p><code>$$ pip install pelican markdown</code></p>
+<div class="highlight"><pre><span></span>$ pip install pelican markdown
+</pre></div>
+
+
 <p>No GitHub é necessário criar um novo projeto e seu nome deve ser <strong>username-do-github.github.io</strong>. No seu diretório de projeto crie um diretório com este mesmo nome.</p>
 <p>Dentro deste novo diretório gere o projeto pelo Pelican:</p>
-<p><code>$$ pelican-quickstart</code></p>
+<div class="highlight"><pre><span></span>$ pelican-quickstart
+</pre></div>
+
+
 <p>Este script realiza algumas perguntas para gerar o website:</p>
 <ol>
 <li>Título do seu site.</li>
@@ -68,30 +80,73 @@ O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é 
 <li>Is this your personal page (username.github.io), informe Y para confirmar.</li>
 </ol>
 <p>Pronto! O projeto já está disponível em seu diretório.</p>
-<h3>Versionamento</h3>
+<h2>Versionamento</h2>
 <p>Agora que o projeto está pronto é necessário iniciar o versionamento com git e adicionar o repositório remoto.</p>
-<p><code>$$ git init</code>
-<code>$$ git remote add origin git@github.com:username-do-github/username-do-github.github.io.git</code></p>
+<div class="highlight"><pre><span></span>$ git init
+$ git remote add origin git@github.com:username-do-github/username-do-github.github.io.git
+</pre></div>
+
+
 <p>É necessário organizar o projeto em 2 branchs:</p>
 <ul>
 <li><strong>pelican</strong>: os arquivos e códigos que gerarão o site estático.</li>
-<li><strong>master</strong>: os arquivos estáticos gerados;</li>
+<li>
+<p><strong>master</strong>: os arquivos estáticos gerados;</p>
+<p>$ git checkout -b pelican
+$ git add .
+$ git commit -m 'start pelican branch'
+$ git push origin pelican</p>
+</li>
 </ul>
-<p><code>$$ git checkout -b pelican</code>
-<code>$$ git add .</code>
-<code>$$ git commit -m 'iniciando branch pelican'</code>
-<code>$$ git push origin pelican</code></p>
 <p>Para publicar o conteúdo estático na branch master é necessário utilizar o <strong>ghp-import</strong>:</p>
-<p><code>$$pip install ghp-import</code></p>
+<div class="highlight"><pre><span></span>$ pip install ghp-import
+</pre></div>
+
+
 <p>E finalmente para gerar o site estático é só utilizar o <strong>make</strong>:</p>
-<p><code>$$make github</code></p>
-<h3>Para configurar um domínio personalizado</h3>
+<div class="highlight"><pre><span></span>$ make github
+</pre></div>
+
+
+<h2>Para configurar um domínio personalizado</h2>
 <p>Este passo é opcional, caso deseje utilizar um domínio próprio.</p>
 <p>Dentro de /content crie um diretório chamado <strong>extra</strong>. Neste diretório crie um arquivo chamado <strong>CNAME</strong> com o nome de seu domínio.</p>
 <p>Em <strong>pelicanconf.py</strong> adicione as seguintes linhas:</p>
 <div class="highlight"><pre><span></span>STATIC_PATHS = [&#39;extra/CNAME&#39;]
 EXTRA_PATH_METADATA = {&#39;extra/CNAME&#39;: {&#39;path&#39;: &#39;CNAME&#39;},}
 </pre></div>
+
+
+<h2>Para fazer o primeiro post</h2>
+<p>Para criar um post é só criar um arquivo markdown no diretório content, com a seguinte estrutura:</p>
+<div class="highlight"><pre><span></span><span class="n">Title</span><span class="o">:</span> <span class="n">Título</span> <span class="k">do</span> <span class="n">post</span>
+<span class="n">Date</span><span class="o">:</span> <span class="n">yyyy</span><span class="o">-</span><span class="n">mm</span><span class="o">-</span><span class="n">dd</span> <span class="n">hh</span><span class="o">:</span><span class="n">mm</span>
+<span class="n">Modified</span><span class="o">:</span> <span class="n">yyyy</span><span class="o">-</span><span class="n">mm</span><span class="o">-</span><span class="n">dd</span> <span class="n">hh</span><span class="o">:</span><span class="n">mm</span>
+<span class="n">Category</span><span class="o">:</span> <span class="n">Categoria</span>
+<span class="n">Tags</span><span class="o">:</span> <span class="n">tag</span><span class="o">,</span> <span class="n">tag</span><span class="o">,</span> <span class="n">tag</span>
+<span class="n">Slug</span><span class="o">:</span> <span class="n">link</span><span class="o">-</span><span class="n">amigavel</span>
+<span class="n">Authors</span><span class="o">:</span> <span class="n">Nome</span> <span class="k">do</span> <span class="n">autor</span>
+<span class="n">Summary</span><span class="o">:</span> <span class="n">Resumo</span> <span class="k">do</span> <span class="n">Post</span>
+
+<span class="n">Conteúdo</span><span class="o">,</span> <span class="n">lembrando</span> <span class="n">de</span> <span class="n">usar</span> <span class="n">markdown</span><span class="o">!</span>
+</pre></div>
+
+
+<p>Por fim é necessário utilizar o git para fazer o commit das alterações, enviar para o repositório no GitHub e publicar o post:</p>
+<div class="highlight"><pre><span></span>$ git add . 
+$ git commit -m <span class="s1">&#39;first post&#39;</span> 
+$ git push origin pelican 
+$ make github
+</pre></div>
+
+
+<p>Fontes:</p>
+<p><a href="http://fnscoder.com/criando-um-blog-com-python-pelican-github-pages-e-dominio-personalizado.html">Criando um blog com Python pelican GitHub Pages e dominio personalizado</a>
+<a href="http://nafiulis.me/making-a-static-blog-with-pelican.html">Making a static blog with Pelican</a>
+<a href="https://rsip22.github.io/blog/create-a-blog-with-pelican-and-github-pages.html">Create a blog with Pelican and GitHub Pages</a>
+<a href="http://cherrymick.com/configure-a-custom-domain-name-with-pelican-and-github-pages.html">Configure a custom domain name with Pelican and Github Pages</a>
+<a href="http://pythonclub.com.br/criando-sites-estaticos-com-pelican.html">Criando sites estaticos com Pelican</a>
+<a href="http://docs.getpelican.com/en/3.6.3/tips.html">Docs Pelican</a></p>
     </div><!-- /.entry-content -->
 
   </article>
