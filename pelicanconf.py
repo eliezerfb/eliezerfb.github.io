@@ -22,12 +22,12 @@ AUTHOR_FEED_RSS = None
 # Blogroll
 LINKS = (('Pelican', 'http://getpelican.com/'),
          ('Python.org', 'http://python.org/'),
-         ('Jinja2', 'http://jinja.pocoo.org/'),
-         ('You can modify those links in your config file', '#'),)
+         ('Jinja2', 'http://jinja.pocoo.org/'),)
 
 # Social widget
 SOCIAL = (('Linkedin', 'https://www.linkedin.com/in/eliezer-bourchardt/'),
-          ('Twitter', 'https://twitter.com/eliezerfb'),
+          ('GitHub', 'https://github.com/eliezerfb'),
+	  ('Twitter', 'https://twitter.com/eliezerfb'),
           ('Facebook', 'https://www.facebook.com/eliezer.bourchardt'),)
 
 DEFAULT_PAGINATION = 10
