@@ -51,5 +51,17 @@ print((total_missing/total_cells) * 100)
 
 
 &lt;p&gt;O método bfill preenche os valores ausentes com qualquer valor que venha diretamente após ele na mesma coluna. Um exemplo de uso pode ser na observação de temperatura ou dados pluviométricos.  &lt;/p&gt;
-&lt;p&gt;Veja também:
-&lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;  &lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry></feed>
+&lt;h1&gt;Converter colunas date para datetime&lt;/h1&gt;
+&lt;p&gt;Colunas tipo data que são reconhecidas como texto devem ser convertidas para ser reconhecidas como uma data. Este procedimento chama-se "parsing dates" porque nós pegamos uma string e indentificamos suas partes.&lt;br&gt;
+Para formatar as datas com o pandas nós utilizamos um guia chamado &lt;a href="http://strftime.org"&gt;strftime directive&lt;/a&gt;. A ideia básica é que você precisa indicar quais partes da data estão onde e qual pontuação está entre elas. Há muitas possibilidades de partes de data, mas a mais comum são %d para dia, %m para mês, %y para ano de dois dígitos e %Y para ano de quatro dígitos.  &lt;/p&gt;
+&lt;p&gt;Alguns exemplos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1/17/07 tem o formato "%m/%d/%y"&lt;/li&gt;
+&lt;li&gt;17-1-2007 tem o formato "%d-%m-%Y"&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Para converter uma coluna data:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;df[&amp;#39;date_parsed&amp;#39;] = pd.to_datetime(df[&amp;#39;date&amp;#39;], format = &amp;quot;%m/%d/%y&amp;quot;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Este post foi baseado em &lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;.&lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry></feed>

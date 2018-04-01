@@ -94,8 +94,20 @@ print((total_missing/total_cells) * 100)
 
 
 <p>O método bfill preenche os valores ausentes com qualquer valor que venha diretamente após ele na mesma coluna. Um exemplo de uso pode ser na observação de temperatura ou dados pluviométricos.  </p>
-<p>Veja também:
-<a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values">Data cleaning challenge by Kaggle</a>  </p>
+<h1>Converter colunas date para datetime</h1>
+<p>Colunas tipo data que são reconhecidas como texto devem ser convertidas para ser reconhecidas como uma data. Este procedimento chama-se "parsing dates" porque nós pegamos uma string e indentificamos suas partes.<br>
+Para formatar as datas com o pandas nós utilizamos um guia chamado <a href="http://strftime.org">strftime directive</a>. A ideia básica é que você precisa indicar quais partes da data estão onde e qual pontuação está entre elas. Há muitas possibilidades de partes de data, mas a mais comum são %d para dia, %m para mês, %y para ano de dois dígitos e %Y para ano de quatro dígitos.  </p>
+<p>Alguns exemplos:</p>
+<ul>
+<li>1/17/07 tem o formato "%m/%d/%y"</li>
+<li>17-1-2007 tem o formato "%d-%m-%Y"</li>
+</ul>
+<p>Para converter uma coluna data:</p>
+<div class="highlight"><pre><span></span>df[&#39;date_parsed&#39;] = pd.to_datetime(df[&#39;date&#39;], format = &quot;%m/%d/%y&quot;)
+</pre></div>
+
+
+<p>Este post foi baseado em <a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values">Data cleaning challenge by Kaggle</a>.</p>
     </div><!-- /.entry-content -->
 
   </article>

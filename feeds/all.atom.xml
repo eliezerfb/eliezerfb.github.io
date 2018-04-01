@@ -51,8 +51,20 @@ print((total_missing/total_cells) * 100)
 
 
 &lt;p&gt;O método bfill preenche os valores ausentes com qualquer valor que venha diretamente após ele na mesma coluna. Um exemplo de uso pode ser na observação de temperatura ou dados pluviométricos.  &lt;/p&gt;
-&lt;p&gt;Veja também:
-&lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;  &lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry><entry><title>Um blog com Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o &lt;a href="http://docs.getpelican.com/en/stable/"&gt;Pelican&lt;/a&gt;.
+&lt;h1&gt;Converter colunas date para datetime&lt;/h1&gt;
+&lt;p&gt;Colunas tipo data que são reconhecidas como texto devem ser convertidas para ser reconhecidas como uma data. Este procedimento chama-se "parsing dates" porque nós pegamos uma string e indentificamos suas partes.&lt;br&gt;
+Para formatar as datas com o pandas nós utilizamos um guia chamado &lt;a href="http://strftime.org"&gt;strftime directive&lt;/a&gt;. A ideia básica é que você precisa indicar quais partes da data estão onde e qual pontuação está entre elas. Há muitas possibilidades de partes de data, mas a mais comum são %d para dia, %m para mês, %y para ano de dois dígitos e %Y para ano de quatro dígitos.  &lt;/p&gt;
+&lt;p&gt;Alguns exemplos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1/17/07 tem o formato "%m/%d/%y"&lt;/li&gt;
+&lt;li&gt;17-1-2007 tem o formato "%d-%m-%Y"&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Para converter uma coluna data:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;df[&amp;#39;date_parsed&amp;#39;] = pd.to_datetime(df[&amp;#39;date&amp;#39;], format = &amp;quot;%m/%d/%y&amp;quot;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Este post foi baseado em &lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;.&lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry><entry><title>Um blog com Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o &lt;a href="http://docs.getpelican.com/en/stable/"&gt;Pelican&lt;/a&gt;.
 O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é necessário utilizar outras ferramentas como Django, Web2Py ou Wordpress. Como não precisa utilizar banco de dados (é apenas HTML estático) o conteúdo do blog fica em documentos de texto, facilitando qualquer futura migração.&lt;/p&gt;
 &lt;p&gt;Para hospedar o blog optei por utilizar o &lt;a href="https://pages.github.com/"&gt;GitHub Pages&lt;/a&gt;. É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.&lt;/p&gt;
 &lt;p&gt;Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o &lt;a href="https://www.anaconda.com/"&gt;Anaconda&lt;/a&gt; para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):&lt;/p&gt;
