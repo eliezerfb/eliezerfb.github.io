@@ -43,16 +43,24 @@ O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é 
 <p>Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o <a href="https://www.anaconda.com/">Anaconda</a> para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):</p>
 <div class="highlight"><pre><span></span>$ conda create -n pelican-env <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.6
 </pre></div>
+
+
 <p>Ative o ambiente virtual:</p>
 <div class="highlight"><pre><span></span>$ <span class="nb">source</span> activate pelican-env
 </pre></div>
+
+
 <p>Com o ambiente virtual ativo instale o Pelican e o Markdown com o pip:</p>
 <div class="highlight"><pre><span></span>$ pip install pelican markdown
 </pre></div>
+
+
 <p>No GitHub é necessário criar um novo projeto e seu nome deve ser <strong>username-do-github.github.io</strong>. No seu diretório de projeto crie um diretório com este mesmo nome.</p>
 <p>Dentro deste novo diretório gere o projeto pelo Pelican:</p>
 <div class="highlight"><pre><span></span>$ pelican-quickstart
 </pre></div>
+
+
 <p>Este script realiza algumas perguntas para gerar o website:</p>
 <ol>
 <li>Título do seu site.</li>
@@ -73,6 +81,8 @@ O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é 
 <div class="highlight"><pre><span></span>$ git init
 $ git remote add origin git@github.com:username-do-github/username-do-github.github.io.git
 </pre></div>
+
+
 <p>É necessário organizar o projeto em 2 branchs:</p>
 <ul>
 <li><strong>pelican</strong>: os arquivos e códigos que gerarão o site estático.</li>
@@ -87,16 +97,22 @@ $ git push origin pelican</p>
 <p>Para publicar o conteúdo estático na branch master é necessário utilizar o <strong>ghp-import</strong>:</p>
 <div class="highlight"><pre><span></span>$ pip install ghp-import
 </pre></div>
+
+
 <p>E finalmente para gerar o site estático é só utilizar o <strong>make</strong>:</p>
 <div class="highlight"><pre><span></span>$ make github
 </pre></div>
+
+
 <h2>Para configurar um domínio personalizado</h2>
 <p>Este passo é opcional, caso deseje utilizar um domínio próprio.</p>
 <p>Dentro de /content crie um diretório chamado <strong>extra</strong>. Neste diretório crie um arquivo chamado <strong>CNAME</strong> com o nome de seu domínio.</p>
 <p>Em <strong>pelicanconf.py</strong> adicione as seguintes linhas:</p>
-<div class="highlight"><pre><span></span>STATIC_PATHS = ['extra/CNAME']
-EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
+<div class="highlight"><pre><span></span>STATIC_PATHS = [&#39;extra/CNAME&#39;]
+EXTRA_PATH_METADATA = {&#39;extra/CNAME&#39;: {&#39;path&#39;: &#39;CNAME&#39;},}
 </pre></div>
+
+
 <h2>Para fazer o primeiro post</h2>
 <p>Para criar um post é só criar um arquivo markdown no diretório content, com a seguinte estrutura:</p>
 <div class="highlight"><pre><span></span><span class="n">Title</span><span class="o">:</span> <span class="n">Título</span> <span class="k">do</span> <span class="n">post</span>
@@ -110,13 +126,17 @@ EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
 
 <span class="n">Conteúdo</span><span class="o">,</span> <span class="n">lembrando</span> <span class="n">de</span> <span class="n">usar</span> <span class="n">Markdown</span><span class="o">!</span>
 </pre></div>
+
+
 <p>Dica: para editar o código em Markdown vale a pena olhar estes editores: <a href="https://pandao.github.io/editor.md/en.html">editor.md</a> ou <a href="https://jbt.github.io/markdown-editor/">markdown editor</a></p>
 <p>Por fim é necessário utilizar o git para fazer o commit das alterações, enviar para o repositório no GitHub e publicar o post:</p>
 <div class="highlight"><pre><span></span>$ git add . 
-$ git commit -m <span class="s1">'first post'</span> 
+$ git commit -m <span class="s1">&#39;first post&#39;</span> 
 $ git push origin pelican 
 $ make github
 </pre></div>
+
+
 <p>Fontes:</p>
 <p><a href="http://fnscoder.com/criando-um-blog-com-python-pelican-github-pages-e-dominio-personalizado.html">Criando um blog com Python pelican GitHub Pages e dominio personalizado</a></p>
 <p><a href="http://nafiulis.me/making-a-static-blog-with-pelican.html">Making a static blog with Pelican</a></p>
