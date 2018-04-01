@@ -70,6 +70,30 @@ print((total_missing/total_cells) * 100)
 <p><img alt="msgno example" class="img-responsive" height="90%" src="/images/msgno.png" width="90%"></p>
 <p>Mas nem todos dados faltantes são erros. Nesse momento é necessário se perguntar: <strong>um dado faltante é porque não foi gravado ou porque não existe?</strong></p>
 <p>Se um valor é faltante porque ele não existe (como a altura do filho mais velho de quem não tem filhos), então não faz sentido tentar adivinhar este valor. Estes valores devem ser mantidos como NaN. Por outro lado, se um valor não existe porque não foi gravado, então podemos tentar adivinhar seu valor baseado em outros valores nesta coluna e linha. </p>
+<h2>Descartar valores ausentes</h2>
+<p>Se não houver uma razão para descobrir por que os valores estão faltando, uma opção é apenas remover as linhas ou colunas que contiverem valores ausentes. Porém esta abordagem não é muito recomendada, principalmente em projetos importantes. Vale a pena dedicar um tempo para analisar os dados e observar todas as colunas com valores ausentes um a um para realmente conhecer o dataset.  </p>
+<p>O código abaixo remove todas as linhas que contém um valor faltante:  </p>
+<div class="highlight"><pre><span></span>df.dropna()
+</pre></div>
+
+
+<p>E para remover todas as colunas que contiver um valor faltante, basta informar axis=1:  s</p>
+<div class="highlight"><pre><span></span>df.dropna(axis=1)
+</pre></div>
+
+
+<h2>Preencher valores ausentes automáticamente</h2>
+<p>Outra opção é tentar preencher os valores ausentes. Para preencher todos NaN com zero:  </p>
+<div class="highlight"><pre><span></span>df.fillna(0)
+</pre></div>
+
+
+<p>Para um conjunto de dados que possuem uma ordem lógica pode ser feito dessa forma:  </p>
+<div class="highlight"><pre><span></span>df.fillna(method = &#39;bfill&#39;, axis=0).fillna(&quot;0&quot;)
+</pre></div>
+
+
+<p>O método bfill preenche os valores ausentes com qualquer valor que venha diretamente após ele na mesma coluna. Um exemplo de uso pode ser na observação de temperatura ou dados pluviométricos.  </p>
 <p>Veja também:
 <a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values">Data cleaning challenge by Kaggle</a>  </p>
     </div><!-- /.entry-content -->

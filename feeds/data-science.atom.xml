@@ -27,5 +27,29 @@ print((total_missing/total_cells) * 100)
 &lt;p&gt;&lt;img alt="msgno example" class="img-responsive" height="90%" src="/images/msgno.png" width="90%"&gt;&lt;/p&gt;
 &lt;p&gt;Mas nem todos dados faltantes são erros. Nesse momento é necessário se perguntar: &lt;strong&gt;um dado faltante é porque não foi gravado ou porque não existe?&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Se um valor é faltante porque ele não existe (como a altura do filho mais velho de quem não tem filhos), então não faz sentido tentar adivinhar este valor. Estes valores devem ser mantidos como NaN. Por outro lado, se um valor não existe porque não foi gravado, então podemos tentar adivinhar seu valor baseado em outros valores nesta coluna e linha. &lt;/p&gt;
+&lt;h2&gt;Descartar valores ausentes&lt;/h2&gt;
+&lt;p&gt;Se não houver uma razão para descobrir por que os valores estão faltando, uma opção é apenas remover as linhas ou colunas que contiverem valores ausentes. Porém esta abordagem não é muito recomendada, principalmente em projetos importantes. Vale a pena dedicar um tempo para analisar os dados e observar todas as colunas com valores ausentes um a um para realmente conhecer o dataset.  &lt;/p&gt;
+&lt;p&gt;O código abaixo remove todas as linhas que contém um valor faltante:  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;df.dropna()
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;E para remover todas as colunas que contiver um valor faltante, basta informar axis=1:  s&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;df.dropna(axis=1)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Preencher valores ausentes automáticamente&lt;/h2&gt;
+&lt;p&gt;Outra opção é tentar preencher os valores ausentes. Para preencher todos NaN com zero:  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;df.fillna(0)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Para um conjunto de dados que possuem uma ordem lógica pode ser feito dessa forma:  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;df.fillna(method = &amp;#39;bfill&amp;#39;, axis=0).fillna(&amp;quot;0&amp;quot;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;O método bfill preenche os valores ausentes com qualquer valor que venha diretamente após ele na mesma coluna. Um exemplo de uso pode ser na observação de temperatura ou dados pluviométricos.  &lt;/p&gt;
 &lt;p&gt;Veja também:
 &lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;  &lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry></feed>
