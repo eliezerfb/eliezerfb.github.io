@@ -5,24 +5,16 @@ O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é 
 &lt;p&gt;Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o &lt;a href="https://www.anaconda.com/"&gt;Anaconda&lt;/a&gt; para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ conda create -n pelican-env &lt;span class="nv"&gt;python&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;.6
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;p&gt;Ative o ambiente virtual:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ &lt;span class="nb"&gt;source&lt;/span&gt; activate pelican-env
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;p&gt;Com o ambiente virtual ativo instale o Pelican e o Markdown com o pip:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ pip install pelican markdown
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;p&gt;No GitHub é necessário criar um novo projeto e seu nome deve ser &lt;strong&gt;username-do-github.github.io&lt;/strong&gt;. No seu diretório de projeto crie um diretório com este mesmo nome.&lt;/p&gt;
 &lt;p&gt;Dentro deste novo diretório gere o projeto pelo Pelican:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ pelican-quickstart
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;p&gt;Este script realiza algumas perguntas para gerar o website:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Título do seu site.&lt;/li&gt;
@@ -43,8 +35,6 @@ O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é 
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ git init
 $ git remote add origin git@github.com:username-do-github/username-do-github.github.io.git
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;p&gt;É necessário organizar o projeto em 2 branchs:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;pelican&lt;/strong&gt;: os arquivos e códigos que gerarão o site estático.&lt;/li&gt;
@@ -59,22 +49,16 @@ $ git push origin pelican&lt;/p&gt;
 &lt;p&gt;Para publicar o conteúdo estático na branch master é necessário utilizar o &lt;strong&gt;ghp-import&lt;/strong&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ pip install ghp-import
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;p&gt;E finalmente para gerar o site estático é só utilizar o &lt;strong&gt;make&lt;/strong&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ make github
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;h2&gt;Para configurar um domínio personalizado&lt;/h2&gt;
 &lt;p&gt;Este passo é opcional, caso deseje utilizar um domínio próprio.&lt;/p&gt;
 &lt;p&gt;Dentro de /content crie um diretório chamado &lt;strong&gt;extra&lt;/strong&gt;. Neste diretório crie um arquivo chamado &lt;strong&gt;CNAME&lt;/strong&gt; com o nome de seu domínio.&lt;/p&gt;
 &lt;p&gt;Em &lt;strong&gt;pelicanconf.py&lt;/strong&gt; adicione as seguintes linhas:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;STATIC_PATHS = [&amp;#39;extra/CNAME&amp;#39;]
-EXTRA_PATH_METADATA = {&amp;#39;extra/CNAME&amp;#39;: {&amp;#39;path&amp;#39;: &amp;#39;CNAME&amp;#39;},}
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;STATIC_PATHS = ['extra/CNAME']
+EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;h2&gt;Para fazer o primeiro post&lt;/h2&gt;
 &lt;p&gt;Para criar um post é só criar um arquivo markdown no diretório content, com a seguinte estrutura:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Title&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Título&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="n"&gt;post&lt;/span&gt;
@@ -88,17 +72,13 @@ EXTRA_PATH_METADATA = {&amp;#39;extra/CNAME&amp;#39;: {&amp;#39;path&amp;#39;: &
 
 &lt;span class="n"&gt;Conteúdo&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lembrando&lt;/span&gt; &lt;span class="n"&gt;de&lt;/span&gt; &lt;span class="n"&gt;usar&lt;/span&gt; &lt;span class="n"&gt;Markdown&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;p&gt;Dica: para editar o código em Markdown vale a pena olhar estes editores: &lt;a href="https://pandao.github.io/editor.md/en.html"&gt;editor.md&lt;/a&gt; ou &lt;a href="https://jbt.github.io/markdown-editor/"&gt;markdown editor&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Por fim é necessário utilizar o git para fazer o commit das alterações, enviar para o repositório no GitHub e publicar o post:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ git add . 
-$ git commit -m &lt;span class="s1"&gt;&amp;#39;first post&amp;#39;&lt;/span&gt; 
+$ git commit -m &lt;span class="s1"&gt;'first post'&lt;/span&gt; 
 $ git push origin pelican 
 $ make github
 &lt;/pre&gt;&lt;/div&gt;
-
-
 &lt;p&gt;Fontes:&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://fnscoder.com/criando-um-blog-com-python-pelican-github-pages-e-dominio-personalizado.html"&gt;Criando um blog com Python pelican GitHub Pages e dominio personalizado&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://nafiulis.me/making-a-static-blog-with-pelican.html"&gt;Making a static blog with Pelican&lt;/a&gt;&lt;/p&gt;
