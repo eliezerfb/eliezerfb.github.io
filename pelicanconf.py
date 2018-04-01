@@ -38,7 +38,4 @@ DEFAULT_PAGINATION = 10
 STATIC_PATHS = ['images','extra/CNAME']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
 
-PLUGIN_PATHS = ['../pelican-plugins']
-PLUGINS = ['better_figures_and_images']
-RESPONSIVE_IMAGES = True
-FIGURE_NUMBERS = True
+
