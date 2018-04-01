@@ -31,7 +31,8 @@ Esta biblioteca permite diversas visualizações, abaixo é possível ver um exe
     %matplotlib inline
     msno.matrix(collisions.sample(250))
 
-![msgno example]({filename}/images/msgno.png)
+![msgno example](/images/msgno.png)
+
 
 Mas nem todos dados faltantes são erros. Nesse momento é necessário se perguntar: **um dado faltante é porque não foi gravado ou porque não existe?**
 
