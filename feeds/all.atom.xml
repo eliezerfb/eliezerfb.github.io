@@ -24,7 +24,7 @@ print((total_missing/total_cells) * 100)
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="msgno example" class="img-responsive" height="85%" src="/images/msgno.png" width="85%"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="msgno example" class="img-responsive" height="90%" src="/images/msgno.png" width="90%"&gt;&lt;/p&gt;
 &lt;p&gt;Mas nem todos dados faltantes são erros. Nesse momento é necessário se perguntar: &lt;strong&gt;um dado faltante é porque não foi gravado ou porque não existe?&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Se um valor é faltante porque ele não existe (como a altura do filho mais velho de quem não tem filhos), então não faz sentido tentar adivinhar este valor. Estes valores devem ser mantidos como NaN. Por outro lado, se um valor não existe porque não foi gravado, então podemos tentar adivinhar seu valor baseado em outros valores nesta coluna e linha. &lt;/p&gt;
 &lt;p&gt;Veja também:
