@@ -38,7 +38,7 @@
 <p>In <a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a>.</p>
 <p>tags: <a href="http://eliezerfb.eti.br/tag/data-science.html">data science</a> <a href="http://eliezerfb.eti.br/tag/data-cleaning.html">data cleaning</a> </p>
 </footer><!-- /.post-info --><p>O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.</p>
-<h2>Manipulação de Dados Faltantes</h2>
+<h1>Manipulação de Dados Faltantes</h1>
 <p>Para obter o número de pontos de dados perdidos por coluna, podemos utilizar o código:</p>
 <div class="highlight"><pre><span></span>missing_values_count = df.isnull().sum()
 total_cells = np.product(df.shape)
