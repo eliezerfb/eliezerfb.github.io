@@ -79,5 +79,5 @@ sns.distplot(day_of_month, kde=False, bins=31)
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="plot days" class="img-responsive" height="100%" src="/images/plot_days_month.png" width="100%"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="plot days" class="img-responsive" src="/images/plot_days_month.png"&gt;&lt;/p&gt;
 &lt;p&gt;Este post foi baseado em &lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values" target="_blank"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;.&lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry></feed>
