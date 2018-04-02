@@ -28,8 +28,8 @@
                 Published: Sáb 31 março 2018
         </abbr>
 		<br />
-        <abbr class="modified" title="2018-03-31T20:23:00-03:00">
-                Updated: Sáb 31 março 2018
+        <abbr class="modified" title="2018-04-01T20:23:00-03:00">
+                Updated: Dom 01 abril 2018
         </abbr>
 
         <address class="vcard author">
@@ -47,7 +47,7 @@ print((total_missing/total_cells) * 100)
 </pre></div>
 
 
-<p>Também podemos visualizar os dados faltantes com a ajuda da biblioteca <a href="https://github.com/ResidentMario/missingno">missingno</a>. </p>
+<p>Também podemos visualizar os dados faltantes com a ajuda da biblioteca <a href="https://github.com/ResidentMario/missingno" target="_blank">missingno</a>. </p>
 <div class="highlight"><pre><span></span>pip install missingno
 </pre></div>
 
@@ -102,7 +102,23 @@ Para formatar as datas com o pandas nós utilizamos um guia chamado <a href="htt
 </pre></div>
 
 
-<p>Este post foi baseado em <a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values">Data cleaning challenge by Kaggle</a>.</p>                </article>
+<p>Mesmo especificando o formato de data, às vezes obtém-se um erro quando houver vários formatos de data em umam única coluna. Se isso acontecer, pode tentarr utilizar o pandas para inferir qual deve ser o formato correto. Isso pode ser feito da seguinte maneira:</p>
+<div class="highlight"><pre><span></span>df[&#39;date_parsed&#39;] = pd.to_datetime(df[&#39;Date&#39;], infer_datetime_format=True)
+</pre></div>
+
+
+<p><strong>Porque não usar sempre infer_datetime_format = True?</strong> Há dois grandes motivos para não deixar o pandas adivinhar o formato da data/hora. A primeira é que o pandas nem sempre é capaz de descobrir o formato correto, especialmente se alguém foi criativo com a entrada de dados. A segunda é que é muito mais lento do que especificar o formato exato das datas.</p>
+<h2>Distribuição do dia do mês para checar a conversão de daata</h2>
+<p>Um dos grandes perigos na conversão de datas é misturar os meses e dias. A função to_datetime() ajuda muito com as mensagens de erro, mesmo assim é boa ideia checar novamente se os dias dos meses extraídos fazem sentido.<br>
+Para fazer isso é possível fazer um gráfico de histograma com os dias do mês. É esperado termos valores distribuídos uniformemente entre 1 e 31, uma vez que não há razão que um dia seja mais comum que outro (exceto 31, pois nem todos os meses tem 31 dias). </p>
+<div class="highlight"><pre><span></span>day_of_month = df[&#39;date_parsed&#39;].dt.day
+day_of_month = day_of_month.dropna()
+sns.distplot(day_of_month, kde=False, bins=31)
+</pre></div>
+
+
+<p><img alt="plot days" class="img-responsive" height="100%" src="/images/plot_days_month.png" width="100%"></p>
+<p>Este post foi baseado em <a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values" target="_blank">Data cleaning challenge by Kaggle</a>.</p>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>

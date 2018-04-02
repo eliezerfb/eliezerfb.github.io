@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Eliézer Bourchardt Personal Blog - Data Science</title><link href="http://eliezerfb.eti.br/" rel="alternate"></link><link href="http://eliezerfb.eti.br/feeds/data-science.atom.xml" rel="self"></link><id>http://eliezerfb.eti.br/</id><updated>2018-03-31T20:23:00-03:00</updated><entry><title>Dicas de Data Cleaning</title><link href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="alternate"></link><published>2018-03-31T20:23:00-03:00</published><updated>2018-03-31T20:23:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/dicas-cata-cleaning.html</id><summary type="html">&lt;p&gt;Algumas dicas e para efetuar limpeza em dados&lt;/p&gt;</summary><content type="html">&lt;p&gt;O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Eliézer Bourchardt Personal Blog - Data Science</title><link href="http://eliezerfb.eti.br/" rel="alternate"></link><link href="http://eliezerfb.eti.br/feeds/data-science.atom.xml" rel="self"></link><id>http://eliezerfb.eti.br/</id><updated>2018-04-01T20:23:00-03:00</updated><entry><title>Dicas de Data Cleaning</title><link href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="alternate"></link><published>2018-03-31T20:23:00-03:00</published><updated>2018-04-01T20:23:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/dicas-cata-cleaning.html</id><summary type="html">&lt;p&gt;Algumas dicas e para efetuar limpeza em dados&lt;/p&gt;</summary><content type="html">&lt;p&gt;O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.&lt;/p&gt;
 &lt;h1&gt;Manipulação de Dados Faltantes&lt;/h1&gt;
 &lt;p&gt;Para obter o número de pontos de dados perdidos por coluna, podemos utilizar o código:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;missing_values_count = df.isnull().sum()
@@ -9,7 +9,7 @@ print((total_missing/total_cells) * 100)
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Também podemos visualizar os dados faltantes com a ajuda da biblioteca &lt;a href="https://github.com/ResidentMario/missingno"&gt;missingno&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;Também podemos visualizar os dados faltantes com a ajuda da biblioteca &lt;a href="https://github.com/ResidentMario/missingno" target="_blank"&gt;missingno&lt;/a&gt;. &lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install missingno
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -64,4 +64,20 @@ Para formatar as datas com o pandas nós utilizamos um guia chamado &lt;a href="
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Este post foi baseado em &lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;.&lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry></feed>
+&lt;p&gt;Mesmo especificando o formato de data, às vezes obtém-se um erro quando houver vários formatos de data em umam única coluna. Se isso acontecer, pode tentarr utilizar o pandas para inferir qual deve ser o formato correto. Isso pode ser feito da seguinte maneira:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;df[&amp;#39;date_parsed&amp;#39;] = pd.to_datetime(df[&amp;#39;Date&amp;#39;], infer_datetime_format=True)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Porque não usar sempre infer_datetime_format = True?&lt;/strong&gt; Há dois grandes motivos para não deixar o pandas adivinhar o formato da data/hora. A primeira é que o pandas nem sempre é capaz de descobrir o formato correto, especialmente se alguém foi criativo com a entrada de dados. A segunda é que é muito mais lento do que especificar o formato exato das datas.&lt;/p&gt;
+&lt;h2&gt;Distribuição do dia do mês para checar a conversão de daata&lt;/h2&gt;
+&lt;p&gt;Um dos grandes perigos na conversão de datas é misturar os meses e dias. A função to_datetime() ajuda muito com as mensagens de erro, mesmo assim é boa ideia checar novamente se os dias dos meses extraídos fazem sentido.&lt;br&gt;
+Para fazer isso é possível fazer um gráfico de histograma com os dias do mês. É esperado termos valores distribuídos uniformemente entre 1 e 31, uma vez que não há razão que um dia seja mais comum que outro (exceto 31, pois nem todos os meses tem 31 dias). &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;day_of_month = df[&amp;#39;date_parsed&amp;#39;].dt.day
+day_of_month = day_of_month.dropna()
+sns.distplot(day_of_month, kde=False, bins=31)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="plot days" class="img-responsive" height="100%" src="/images/plot_days_month.png" width="100%"&gt;&lt;/p&gt;
+&lt;p&gt;Este post foi baseado em &lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values" target="_blank"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;.&lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry></feed>
