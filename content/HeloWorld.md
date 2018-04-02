@@ -7,12 +7,12 @@ Slug: blog-python-pelican
 Authors: Eliézer
 Summary: Como utilizar o Pelican para criar um blog pessoal.
 
-Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o [Pelican](http://docs.getpelican.com/en/stable/).
+Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o [Pelican](http://docs.getpelican.com/en/stable/){:target="_blank"}.
 O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é necessário utilizar outras ferramentas como Django, Web2Py ou Wordpress. Como não precisa utilizar banco de dados (é apenas HTML estático) o conteúdo do blog fica em documentos de texto, facilitando qualquer futura migração.
 
-Para hospedar o blog optei por utilizar o [GitHub Pages](https://pages.github.com/). É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.
+Para hospedar o blog optei por utilizar o [GitHub Pages](https://pages.github.com/){:target="_blank"}. É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.
 
-Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o [Anaconda](https://www.anaconda.com/) para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):
+Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o [Anaconda](https://www.anaconda.com/){:target="_blank"} para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):
 
     $ conda create -n pelican-env python=3.6
 
