@@ -82,15 +82,9 @@ sns.distplot(day_of_month, kde=False, bins=31)
 &lt;p&gt;&lt;img alt="plot days" class="img-responsive" src="/images/plot_days_month.png"&gt;&lt;/p&gt;
 &lt;h2&gt;Codificação de caracteres&lt;/h2&gt;
 &lt;p&gt;Codificação de caracteres (Character encodings) são conjuntos específicos de regras para mapeamento de sequências de bytes binários brutos (que se parece com isso: 0110100001101001) para caracteres que compõem o texto legível (como "oi"). Existem muitas codificações diferentes, e se você tentou ler em texto com uma codificação diferente da que foi originalmente escrita, você acabou com um texto embaralhado chamado "mojibake" (mo-gee-bah-kay). Aqui está um exemplo de mojibake:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;æ–‡å—åŒ–ã??
-&lt;/pre&gt;&lt;/div&gt;
-
-
+&lt;p&gt;æ–‡å—åŒ–ã??&lt;/p&gt;
 &lt;p&gt;Você também pode acabar com um caractere "desconhecido". Há o que é impresso quando não há mapeamento entre um byte específico e um caractere na codificação que você está usando para ler sua cadeia de bytes e eles se parecem com isso:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;����������
-&lt;/pre&gt;&lt;/div&gt;
-
-
+&lt;p&gt;����������&lt;/p&gt;
 &lt;p&gt;UTF-8 é a codificação de texto padrão. Todo o código Python está em UTF-8 e, idealmente, todos os dados também devem estar.&lt;/p&gt;
 &lt;p&gt;Para converter uma variável string para bytes:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;before = &amp;quot;This is the euro symbol: €&amp;quot;
@@ -115,7 +109,8 @@ after = before.encode(&amp;quot;utf-8&amp;quot;, errors = &amp;quot;replace&amp;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p 0.73_="0.73," _="''" _Windows-1252_="'Windows-1252'," _confidence_:="'confidence':" _encoding_:="'encoding':" _language_:="'language':"&gt;Resultando em:&lt;/p&gt;
+&lt;p&gt;Resultando em:  &lt;/p&gt;
+&lt;p&gt;'encoding': 'Windows-1252', 'confidence': 0.73, 'language': ''  &lt;/p&gt;
 &lt;p&gt;Portanto, chardet tem 73% de confiança de que a codificação correta é "Windows-1252". Para carregar o arquivo com a codificação correta usando o pandas:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pd.read_csv(&amp;quot;ks-projects-201612.csv&amp;quot;, encoding=&amp;#39;Windows-1252&amp;#39;)
 &lt;/pre&gt;&lt;/div&gt;

@@ -125,15 +125,9 @@ sns.distplot(day_of_month, kde=False, bins=31)
 <p><img alt="plot days" class="img-responsive" src="/images/plot_days_month.png"></p>
 <h2>Codificação de caracteres</h2>
 <p>Codificação de caracteres (Character encodings) são conjuntos específicos de regras para mapeamento de sequências de bytes binários brutos (que se parece com isso: 0110100001101001) para caracteres que compõem o texto legível (como "oi"). Existem muitas codificações diferentes, e se você tentou ler em texto com uma codificação diferente da que foi originalmente escrita, você acabou com um texto embaralhado chamado "mojibake" (mo-gee-bah-kay). Aqui está um exemplo de mojibake:</p>
-<div class="highlight"><pre><span></span>æ–‡å—åŒ–ã??
-</pre></div>
-
-
+<p>æ–‡å—åŒ–ã??</p>
 <p>Você também pode acabar com um caractere "desconhecido". Há o que é impresso quando não há mapeamento entre um byte específico e um caractere na codificação que você está usando para ler sua cadeia de bytes e eles se parecem com isso:</p>
-<div class="highlight"><pre><span></span>����������
-</pre></div>
-
-
+<p>����������</p>
 <p>UTF-8 é a codificação de texto padrão. Todo o código Python está em UTF-8 e, idealmente, todos os dados também devem estar.</p>
 <p>Para converter uma variável string para bytes:</p>
 <div class="highlight"><pre><span></span>before = &quot;This is the euro symbol: €&quot;
@@ -158,7 +152,8 @@ after = before.encode(&quot;utf-8&quot;, errors = &quot;replace&quot;)
 </pre></div>
 
 
-<p 0.73_="0.73," _="''" _Windows-1252_="'Windows-1252'," _confidence_:="'confidence':" _encoding_:="'encoding':" _language_:="'language':">Resultando em:</p>
+<p>Resultando em:  </p>
+<p>'encoding': 'Windows-1252', 'confidence': 0.73, 'language': ''  </p>
 <p>Portanto, chardet tem 73% de confiança de que a codificação correta é "Windows-1252". Para carregar o arquivo com a codificação correta usando o pandas:</p>
 <div class="highlight"><pre><span></span>pd.read_csv(&quot;ks-projects-201612.csv&quot;, encoding=&#39;Windows-1252&#39;)
 </pre></div>
