@@ -96,11 +96,11 @@ Para fazer isso é possível fazer um gráfico de histograma com os dias do mês
 
 Codificação de caracteres (Character encodings) são conjuntos específicos de regras para mapeamento de sequências de bytes binários brutos (que se parece com isso: 0110100001101001) para caracteres que compõem o texto legível (como "oi"). Existem muitas codificações diferentes, e se você tentou ler em texto com uma codificação diferente da que foi originalmente escrita, você acabou com um texto embaralhado chamado "mojibake" (mo-gee-bah-kay). Aqui está um exemplo de mojibake:
 
-    æ–‡å—åŒ–ã??
+æ–‡å—åŒ–ã??
 
 Você também pode acabar com um caractere "desconhecido". Há o que é impresso quando não há mapeamento entre um byte específico e um caractere na codificação que você está usando para ler sua cadeia de bytes e eles se parecem com isso:
 
-    ����������
+����������
 
 UTF-8 é a codificação de texto padrão. Todo o código Python está em UTF-8 e, idealmente, todos os dados também devem estar.
 
@@ -125,8 +125,9 @@ Para descobrir a codificação de um arquivo pode ser utilizado o seguinte códi
     with open("ks-projects-201801.csv", 'rb') as rawdata:
         print(chardet.detect(rawdata.read(10000)))
 
-Resultando em:
-    {'encoding': 'Windows-1252', 'confidence': 0.73, 'language': ''}
+Resultando em:  
+
+'encoding': 'Windows-1252', 'confidence': 0.73, 'language': ''  
 
 Portanto, chardet tem 73% de confiança de que a codificação correta é "Windows-1252". Para carregar o arquivo com a codificação correta usando o pandas:
 
