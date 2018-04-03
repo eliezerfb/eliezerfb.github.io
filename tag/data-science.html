@@ -28,8 +28,8 @@
                 Published: Sáb 31 março 2018
         </abbr>
 		<br />
-        <abbr class="modified" title="2018-04-01T20:23:00-03:00">
-                Updated: Dom 01 abril 2018
+        <abbr class="modified" title="2018-04-02T21:07:00-03:00">
+                Updated: Seg 02 abril 2018
         </abbr>
 
         <address class="vcard author">
@@ -108,7 +108,7 @@ Para formatar as datas com o pandas nós utilizamos um guia chamado <a href="htt
 
 
 <p><strong>Porque não usar sempre infer_datetime_format = True?</strong> Há dois grandes motivos para não deixar o pandas adivinhar o formato da data/hora. A primeira é que o pandas nem sempre é capaz de descobrir o formato correto, especialmente se alguém foi criativo com a entrada de dados. A segunda é que é muito mais lento do que especificar o formato exato das datas.</p>
-<h2>Distribuição do dia do mês para checar a conversão de daata</h2>
+<h2>Distribuição do dia do mês para checar a conversão de data</h2>
 <p>Um dos grandes perigos na conversão de datas é misturar os meses e dias. A função to_datetime() ajuda muito com as mensagens de erro, mesmo assim é boa ideia checar novamente se os dias dos meses extraídos fazem sentido.<br>
 Para fazer isso é possível fazer um gráfico de histograma com os dias do mês. É esperado termos valores distribuídos uniformemente entre 1 e 31, uma vez que não há razão que um dia seja mais comum que outro (exceto 31, pois nem todos os meses tem 31 dias). </p>
 <div class="highlight"><pre><span></span>day_of_month = df[&#39;date_parsed&#39;].dt.day
@@ -118,6 +118,47 @@ sns.distplot(day_of_month, kde=False, bins=31)
 
 
 <p><img alt="plot days" class="img-responsive" src="/images/plot_days_month.png"></p>
+<h2>Codificação de caracteres</h2>
+<p>Codificação de caracteres (Character encodings) são conjuntos específicos de regras para mapeamento de sequências de bytes binários brutos (que se parece com isso: 0110100001101001) para caracteres que compõem o texto legível (como "oi"). Existem muitas codificações diferentes, e se você tentou ler em texto com uma codificação diferente da que foi originalmente escrita, você acabou com um texto embaralhado chamado "mojibake" (mo-gee-bah-kay). Aqui está um exemplo de mojibake:</p>
+<div class="highlight"><pre><span></span>æ–‡å—åŒ–ã??
+</pre></div>
+
+
+<p>Você também pode acabar com um caractere "desconhecido". Há o que é impresso quando não há mapeamento entre um byte específico e um caractere na codificação que você está usando para ler sua cadeia de bytes e eles se parecem com isso:</p>
+<div class="highlight"><pre><span></span>����������
+</pre></div>
+
+
+<p>UTF-8 é a codificação de texto padrão. Todo o código Python está em UTF-8 e, idealmente, todos os dados também devem estar.</p>
+<p>Para converter uma variável string para bytes:</p>
+<div class="highlight"><pre><span></span>before = &quot;This is the euro symbol: €&quot;
+after = before.encode(&quot;utf-8&quot;, errors = &quot;replace&quot;)
+</pre></div>
+
+
+<p>Ao imprimir a variável after fica da seguinte forma:</p>
+<div class="highlight"><pre><span></span>b&#39;This is the euro symbol: \xe2\x82\xac&#39;
+</pre></div>
+
+
+<p>Para visualizar o texto corretamente é necessário converter para string, da seguinte maneira:</p>
+<div class="highlight"><pre><span></span>print(after.decode(&quot;utf-8&quot;))
+</pre></div>
+
+
+<h2>Lendo arquivos com problemas de codificação</h2>
+<p>Para descobrir a codificação de um arquivo pode ser utilizado o seguinte código:</p>
+<div class="highlight"><pre><span></span>with open(&quot;ks-projects-201801.csv&quot;, &#39;rb&#39;) as rawdata:
+    print(chardet.detect(rawdata.read(10000)))
+</pre></div>
+
+
+<p 0.73_="0.73," _="''" _Windows-1252_="'Windows-1252'," _confidence_:="'confidence':" _encoding_:="'encoding':" _language_:="'language':">Resultando em:</p>
+<p>Portanto, chardet tem 73% de confiança de que a codificação correta é "Windows-1252". Para carregar o arquivo com a codificação correta usando o pandas:</p>
+<div class="highlight"><pre><span></span>pd.read_csv(&quot;ks-projects-201612.csv&quot;, encoding=&#39;Windows-1252&#39;)
+</pre></div>
+
+
 <p>Este post foi baseado em <a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values" target="_blank">Data cleaning challenge by Kaggle</a>.</p>                </article>
             </aside><!-- /#featured -->
         <section id="extras" class="body">

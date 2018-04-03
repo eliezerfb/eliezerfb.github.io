@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Eliézer Bourchardt Personal Blog</title><link href="http://eliezerfb.eti.br/" rel="alternate"></link><link href="http://eliezerfb.eti.br/feeds/all.atom.xml" rel="self"></link><id>http://eliezerfb.eti.br/</id><updated>2018-04-01T20:23:00-03:00</updated><entry><title>Dicas de Data Cleaning</title><link href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="alternate"></link><published>2018-03-31T20:23:00-03:00</published><updated>2018-04-01T20:23:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/dicas-cata-cleaning.html</id><summary type="html">&lt;p&gt;Algumas dicas e para efetuar limpeza em dados&lt;/p&gt;</summary><content type="html">&lt;p&gt;O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Eliézer Bourchardt Personal Blog</title><link href="http://eliezerfb.eti.br/" rel="alternate"></link><link href="http://eliezerfb.eti.br/feeds/all.atom.xml" rel="self"></link><id>http://eliezerfb.eti.br/</id><updated>2018-04-02T21:07:00-03:00</updated><entry><title>Dicas de Data Cleaning</title><link href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="alternate"></link><published>2018-03-31T20:23:00-03:00</published><updated>2018-04-02T21:07:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/dicas-cata-cleaning.html</id><summary type="html">&lt;p&gt;Algumas dicas e para efetuar limpeza em dados&lt;/p&gt;</summary><content type="html">&lt;p&gt;O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.&lt;/p&gt;
 &lt;h1&gt;Manipulação de Dados Faltantes&lt;/h1&gt;
 &lt;p&gt;Para obter o número de pontos de dados perdidos por coluna, podemos utilizar o código:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;missing_values_count = df.isnull().sum()
@@ -70,7 +70,7 @@ Para formatar as datas com o pandas nós utilizamos um guia chamado &lt;a href="
 
 
 &lt;p&gt;&lt;strong&gt;Porque não usar sempre infer_datetime_format = True?&lt;/strong&gt; Há dois grandes motivos para não deixar o pandas adivinhar o formato da data/hora. A primeira é que o pandas nem sempre é capaz de descobrir o formato correto, especialmente se alguém foi criativo com a entrada de dados. A segunda é que é muito mais lento do que especificar o formato exato das datas.&lt;/p&gt;
-&lt;h2&gt;Distribuição do dia do mês para checar a conversão de daata&lt;/h2&gt;
+&lt;h2&gt;Distribuição do dia do mês para checar a conversão de data&lt;/h2&gt;
 &lt;p&gt;Um dos grandes perigos na conversão de datas é misturar os meses e dias. A função to_datetime() ajuda muito com as mensagens de erro, mesmo assim é boa ideia checar novamente se os dias dos meses extraídos fazem sentido.&lt;br&gt;
 Para fazer isso é possível fazer um gráfico de histograma com os dias do mês. É esperado termos valores distribuídos uniformemente entre 1 e 31, uma vez que não há razão que um dia seja mais comum que outro (exceto 31, pois nem todos os meses tem 31 dias). &lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;day_of_month = df[&amp;#39;date_parsed&amp;#39;].dt.day
@@ -80,6 +80,47 @@ sns.distplot(day_of_month, kde=False, bins=31)
 
 
 &lt;p&gt;&lt;img alt="plot days" class="img-responsive" src="/images/plot_days_month.png"&gt;&lt;/p&gt;
+&lt;h2&gt;Codificação de caracteres&lt;/h2&gt;
+&lt;p&gt;Codificação de caracteres (Character encodings) são conjuntos específicos de regras para mapeamento de sequências de bytes binários brutos (que se parece com isso: 0110100001101001) para caracteres que compõem o texto legível (como "oi"). Existem muitas codificações diferentes, e se você tentou ler em texto com uma codificação diferente da que foi originalmente escrita, você acabou com um texto embaralhado chamado "mojibake" (mo-gee-bah-kay). Aqui está um exemplo de mojibake:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;æ–‡å—åŒ–ã??
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Você também pode acabar com um caractere "desconhecido". Há o que é impresso quando não há mapeamento entre um byte específico e um caractere na codificação que você está usando para ler sua cadeia de bytes e eles se parecem com isso:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;����������
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;UTF-8 é a codificação de texto padrão. Todo o código Python está em UTF-8 e, idealmente, todos os dados também devem estar.&lt;/p&gt;
+&lt;p&gt;Para converter uma variável string para bytes:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;before = &amp;quot;This is the euro symbol: €&amp;quot;
+after = before.encode(&amp;quot;utf-8&amp;quot;, errors = &amp;quot;replace&amp;quot;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Ao imprimir a variável after fica da seguinte forma:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;b&amp;#39;This is the euro symbol: \xe2\x82\xac&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Para visualizar o texto corretamente é necessário converter para string, da seguinte maneira:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;print(after.decode(&amp;quot;utf-8&amp;quot;))
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Lendo arquivos com problemas de codificação&lt;/h2&gt;
+&lt;p&gt;Para descobrir a codificação de um arquivo pode ser utilizado o seguinte código:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;with open(&amp;quot;ks-projects-201801.csv&amp;quot;, &amp;#39;rb&amp;#39;) as rawdata:
+    print(chardet.detect(rawdata.read(10000)))
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p 0.73_="0.73," _="''" _Windows-1252_="'Windows-1252'," _confidence_:="'confidence':" _encoding_:="'encoding':" _language_:="'language':"&gt;Resultando em:&lt;/p&gt;
+&lt;p&gt;Portanto, chardet tem 73% de confiança de que a codificação correta é "Windows-1252". Para carregar o arquivo com a codificação correta usando o pandas:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pd.read_csv(&amp;quot;ks-projects-201612.csv&amp;quot;, encoding=&amp;#39;Windows-1252&amp;#39;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;Este post foi baseado em &lt;a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values" target="_blank"&gt;Data cleaning challenge by Kaggle&lt;/a&gt;.&lt;/p&gt;</content><category term="data science"></category><category term="data cleaning"></category></entry><entry><title>Um blog com Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o &lt;a href="http://docs.getpelican.com/en/stable/" target="_blank"&gt;Pelican&lt;/a&gt;.
 O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é necessário utilizar outras ferramentas como Django, Web2Py ou Wordpress. Como não precisa utilizar banco de dados (é apenas HTML estático) o conteúdo do blog fica em documentos de texto, facilitando qualquer futura migração.&lt;/p&gt;
 &lt;p&gt;Para hospedar o blog optei por utilizar o &lt;a href="https://pages.github.com/" target="_blank"&gt;GitHub Pages&lt;/a&gt;. É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.&lt;/p&gt;
