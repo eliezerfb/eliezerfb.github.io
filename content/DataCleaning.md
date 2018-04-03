@@ -1,6 +1,6 @@
 Title: Dicas de Data Cleaning
 Date: 2018-03-31 20:23
-Modified: 2018-04-01 20:23
+Modified: 2018-04-02 21:07
 Category: Data Science
 Tags: data science, data cleaning, 
 Slug: dicas-cata-cleaning
@@ -81,7 +81,7 @@ Mesmo especificando o formato de data, às vezes obtém-se um erro quando houver
 
 **Porque não usar sempre infer_datetime_format = True?** Há dois grandes motivos para não deixar o pandas adivinhar o formato da data/hora. A primeira é que o pandas nem sempre é capaz de descobrir o formato correto, especialmente se alguém foi criativo com a entrada de dados. A segunda é que é muito mais lento do que especificar o formato exato das datas.
 
-## Distribuição do dia do mês para checar a conversão de daata
+## Distribuição do dia do mês para checar a conversão de data
 
 Um dos grandes perigos na conversão de datas é misturar os meses e dias. A função to_datetime() ajuda muito com as mensagens de erro, mesmo assim é boa ideia checar novamente se os dias dos meses extraídos fazem sentido.  
 Para fazer isso é possível fazer um gráfico de histograma com os dias do mês. É esperado termos valores distribuídos uniformemente entre 1 e 31, uma vez que não há razão que um dia seja mais comum que outro (exceto 31, pois nem todos os meses tem 31 dias). 
@@ -90,7 +90,48 @@ Para fazer isso é possível fazer um gráfico de histograma com os dias do mês
     day_of_month = day_of_month.dropna()
     sns.distplot(day_of_month, kde=False, bins=31)
 
-![plot days](/images/plot_days_month.png){:height="100%" width="100%" class="img-responsive"}
+![plot days](/images/plot_days_month.png){:class="img-responsive"}
+
+## Codificação de caracteres
+
+Codificação de caracteres (Character encodings) são conjuntos específicos de regras para mapeamento de sequências de bytes binários brutos (que se parece com isso: 0110100001101001) para caracteres que compõem o texto legível (como "oi"). Existem muitas codificações diferentes, e se você tentou ler em texto com uma codificação diferente da que foi originalmente escrita, você acabou com um texto embaralhado chamado "mojibake" (mo-gee-bah-kay). Aqui está um exemplo de mojibake:
+
+    æ–‡å—åŒ–ã??
+
+Você também pode acabar com um caractere "desconhecido". Há o que é impresso quando não há mapeamento entre um byte específico e um caractere na codificação que você está usando para ler sua cadeia de bytes e eles se parecem com isso:
+
+    ����������
+
+UTF-8 é a codificação de texto padrão. Todo o código Python está em UTF-8 e, idealmente, todos os dados também devem estar.
+
+Para converter uma variável string para bytes:
+
+    before = "This is the euro symbol: €"
+    after = before.encode("utf-8", errors = "replace")
+
+Ao imprimir a variável after fica da seguinte forma:
+
+    b'This is the euro symbol: \xe2\x82\xac'
+
+Para visualizar o texto corretamente é necessário converter para string, da seguinte maneira:
+
+    print(after.decode("utf-8"))
+
+
+## Lendo arquivos com problemas de codificação
+
+Para descobrir a codificação de um arquivo pode ser utilizado o seguinte código:
+
+    with open("ks-projects-201801.csv", 'rb') as rawdata:
+        print(chardet.detect(rawdata.read(10000)))
+
+Resultando em:
+    {'encoding': 'Windows-1252', 'confidence': 0.73, 'language': ''}
+
+Portanto, chardet tem 73% de confiança de que a codificação correta é "Windows-1252". Para carregar o arquivo com a codificação correta usando o pandas:
+
+    pd.read_csv("ks-projects-201612.csv", encoding='Windows-1252')
+
 
 Este post foi baseado em [Data cleaning challenge by Kaggle](https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values){:target="_blank"}.
 
