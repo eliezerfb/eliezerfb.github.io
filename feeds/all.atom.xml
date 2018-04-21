@@ -22,7 +22,22 @@ if s:
 s = &amp;quot;&amp;quot;
 if not s:
     print(&amp;quot;Está vazio&amp;quot;)
-&lt;/pre&gt;&lt;/div&gt;</content><category term="python"></category><category term="strings"></category><category term="dicas"></category></entry><entry><title>Dicas de Data Cleaning</title><link href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="alternate"></link><published>2018-03-31T20:23:00-03:00</published><updated>2018-04-02T21:07:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/dicas-cata-cleaning.html</id><summary type="html">&lt;p&gt;Algumas dicas e para efetuar limpeza em dados&lt;/p&gt;</summary><content type="html">&lt;p&gt;O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.&lt;/p&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1&gt;Adição e multiplicação de Strings&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;s = &amp;#39; the &amp;#39;
+print(&amp;#39;Fell&amp;#39;+s+&amp;#39;Force.&amp;#39;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fell the Force.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;</content><category term="python"></category><category term="strings"></category><category term="dicas"></category></entry><entry><title>Dicas de Data Cleaning</title><link href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="alternate"></link><published>2018-03-31T20:23:00-03:00</published><updated>2018-04-02T21:07:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/dicas-cata-cleaning.html</id><summary type="html">&lt;p&gt;Algumas dicas e para efetuar limpeza em dados&lt;/p&gt;</summary><content type="html">&lt;p&gt;O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.&lt;/p&gt;
 &lt;h1&gt;Manipulação de Dados Faltantes&lt;/h1&gt;
 &lt;p&gt;Para obter o número de pontos de dados perdidos por coluna, podemos utilizar o código:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;missing_values_count = df.isnull().sum()

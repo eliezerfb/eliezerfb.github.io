@@ -22,7 +22,22 @@ if s:
 s = &amp;quot;&amp;quot;
 if not s:
     print(&amp;quot;Está vazio&amp;quot;)
-&lt;/pre&gt;&lt;/div&gt;</content><category term="python"></category><category term="strings"></category><category term="dicas"></category></entry><entry><title>Um blog com Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o &lt;a href="http://docs.getpelican.com/en/stable/" target="_blank"&gt;Pelican&lt;/a&gt;.
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1&gt;Adição e multiplicação de Strings&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;s = &amp;#39; the &amp;#39;
+print(&amp;#39;Fell&amp;#39;+s+&amp;#39;Force.&amp;#39;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fell the Force.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;</content><category term="python"></category><category term="strings"></category><category term="dicas"></category></entry><entry><title>Um blog com Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o &lt;a href="http://docs.getpelican.com/en/stable/" target="_blank"&gt;Pelican&lt;/a&gt;.
 O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é necessário utilizar outras ferramentas como Django, Web2Py ou Wordpress. Como não precisa utilizar banco de dados (é apenas HTML estático) o conteúdo do blog fica em documentos de texto, facilitando qualquer futura migração.&lt;/p&gt;
 &lt;p&gt;Para hospedar o blog optei por utilizar o &lt;a href="https://pages.github.com/" target="_blank"&gt;GitHub Pages&lt;/a&gt;. É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.&lt;/p&gt;
 &lt;p&gt;Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o &lt;a href="https://www.anaconda.com/" target="_blank"&gt;Anaconda&lt;/a&gt; para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):&lt;/p&gt;
