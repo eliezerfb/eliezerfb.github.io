@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
         <meta charset="utf-8" />
-        <title>Eliézer Bourchardt Personal Blog</title>
+        <title>Eliézer Bourchardt Personal Blog - dicas</title>
         <link rel="stylesheet" href="http://eliezerfb.eti.br/theme/css/main.css" />
         <link href="http://eliezerfb.eti.br/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Eliézer Bourchardt Personal Blog Atom Feed" />
 
@@ -19,18 +19,49 @@
                     <li><a href="http://eliezerfb.eti.br/category/python.html">Python</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
-<section id="content" class="body">
-<h1>Archives for Eliézer Bourchardt Personal Blog</h1>
 
-<dl>
-    <dt>Sáb 21 abril 2018</dt>
-    <dd><a href="http://eliezerfb.eti.br/dicas-strings.html">Dicas de manipulação de Strings em Python</a></dd>
-    <dt>Sáb 31 março 2018</dt>
-    <dd><a href="http://eliezerfb.eti.br/dicas-cata-cleaning.html">Dicas de Data Cleaning</a></dd>
-    <dt>Sáb 31 março 2018</dt>
-    <dd><a href="http://eliezerfb.eti.br/blog-python-pelican.html">Um blog com Pelican e Github Pages</a></dd>
-</dl>
-</section>
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/dicas-strings.html">Dicas de manipulação de Strings em Python</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-04-21T19:23:00-03:00">
+                Published: Sáb 21 abril 2018
+        </abbr>
+		<br />
+        <abbr class="modified" title="2018-04-21T19:23:00-03:00">
+                Updated: Sáb 21 abril 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
+        </address>
+<p>In <a href="http://eliezerfb.eti.br/category/python.html">Python</a>.</p>
+<p>tags: <a href="http://eliezerfb.eti.br/tag/python.html">python</a> <a href="http://eliezerfb.eti.br/tag/strings.html">strings</a> <a href="http://eliezerfb.eti.br/tag/dicas.html">dicas</a> </p>
+</footer><!-- /.post-info --><h1>Aspas</h1>
+<p>Aspas simples e duplas são tratadas da mesma forma em Python. Não há diferença.
+Isso é util quando for inserir uma aspa dentro de uma string. Três aspas podem ser utilizadas para strings muito grandes.</p>
+<div class="highlight"><pre><span></span>print(&#39;&#39;&#39;&quot;Heeded my words not, did you?
+    Pass on what you have learned.
+    Strength, mastery. But weakness, folly, failure also.
+    Yes, failure most of all.
+    The greatest teacher, failure is.
+    Luke, we are what they grow beyond.
+    That is the true burden of all masters.&quot;
+    — Master Yoda&#39;&#39;&#39;)
+</pre></div>
+
+
+<h1>True ou False?</h1>
+<p>Quando uma string é vazia ela retorna False e True quando está preenchida.</p>
+<div class="highlight"><pre><span></span>s = &quot;May the Force be with you.&quot;
+if s:
+    print(&quot;Tem conteúdo!&quot;)
+
+s = &quot;&quot;
+if not s:
+    print(&quot;Está vazio&quot;)
+</pre></div>                </article>
+            </aside><!-- /#featured -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>
