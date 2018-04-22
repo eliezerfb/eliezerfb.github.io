@@ -197,46 +197,46 @@ for c in s:
     print(c)
 ```
 
-T
-r
-u
-l
-y
+T  
+r  
+u  
+l  
+y  
  
-w
-o
-n
-d
-e
-r
-f
-u
-l
-,
+w  
+o  
+n  
+d  
+e  
+r  
+f  
+u  
+l  
+,  
+   
+t  
+h  
+e  
+   
+m  
+i  
+n  
+d  
  
-t
-h
-e
+o  
+f  
  
-m
-i
-n
-d
+a  
+  
+c  
+h  
+i  
+l  
+d  
  
-o
-f
- 
-a
- 
-c
-h
-i
-l
-d
- 
-i
-s
-.
+i  
+s  
+.  
 
 
-[Estes exemplos estão disponíveis em meu repositório do GitHub](https://github.com/eliezerfb/python_tests/blob/master/manipulacao_strings/Manipula%C3%A7%C3%A3o%20de%20Strings.ipynb)
+[Estes exemplos também estão disponíveis em meu repositório do GitHub](https://github.com/eliezerfb/python_tests/blob/master/manipulacao_strings/Manipula%C3%A7%C3%A3o%20de%20Strings.ipynb){:target="_blank"}
