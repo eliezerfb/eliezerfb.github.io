@@ -177,40 +177,40 @@ Isso é util quando for inserir uma aspa dentro de uma string. Três aspas podem
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;T
-r
-u
-l
-y&lt;/p&gt;
-&lt;p&gt;w
-o
-n
-d
-e
-r
-f
-u
-l
-,&lt;/p&gt;
-&lt;p&gt;t
-h
-e&lt;/p&gt;
-&lt;p&gt;m
-i
-n
-d&lt;/p&gt;
-&lt;p&gt;o
-f&lt;/p&gt;
-&lt;p&gt;a&lt;/p&gt;
-&lt;p&gt;c
-h
-i
-l
-d&lt;/p&gt;
-&lt;p&gt;i
-s
-.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://github.com/eliezerfb/python_tests/blob/master/manipulacao_strings/Manipula%C3%A7%C3%A3o%20de%20Strings.ipynb"&gt;Estes exemplos estão disponíveis em meu repositório do GitHub&lt;/a&gt;&lt;/p&gt;</content><category term="python"></category><category term="strings"></category><category term="dicas"></category></entry><entry><title>Um blog com Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o &lt;a href="http://docs.getpelican.com/en/stable/" target="_blank"&gt;Pelican&lt;/a&gt;.
+&lt;p&gt;T&lt;br&gt;
+r&lt;br&gt;
+u&lt;br&gt;
+l&lt;br&gt;
+y  &lt;/p&gt;
+&lt;p&gt;w&lt;br&gt;
+o&lt;br&gt;
+n&lt;br&gt;
+d&lt;br&gt;
+e&lt;br&gt;
+r&lt;br&gt;
+f&lt;br&gt;
+u&lt;br&gt;
+l&lt;br&gt;
+,  &lt;/p&gt;
+&lt;p&gt;t&lt;br&gt;
+h&lt;br&gt;
+e  &lt;/p&gt;
+&lt;p&gt;m&lt;br&gt;
+i&lt;br&gt;
+n&lt;br&gt;
+d  &lt;/p&gt;
+&lt;p&gt;o&lt;br&gt;
+f  &lt;/p&gt;
+&lt;p&gt;a  &lt;/p&gt;
+&lt;p&gt;c&lt;br&gt;
+h&lt;br&gt;
+i&lt;br&gt;
+l&lt;br&gt;
+d  &lt;/p&gt;
+&lt;p&gt;i&lt;br&gt;
+s&lt;br&gt;
+.  &lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/eliezerfb/python_tests/blob/master/manipulacao_strings/Manipula%C3%A7%C3%A3o%20de%20Strings.ipynb" target="_blank"&gt;Estes exemplos também estão disponíveis em meu repositório do GitHub&lt;/a&gt;&lt;/p&gt;</content><category term="python"></category><category term="strings"></category><category term="dicas"></category></entry><entry><title>Um blog com Pelican e Github Pages</title><link href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="alternate"></link><published>2018-03-31T15:00:00-03:00</published><updated>2018-03-31T15:00:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/blog-python-pelican.html</id><summary type="html">&lt;p&gt;Como utilizar o Pelican para criar um blog pessoal.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Na necessidade de criar um blog pessoal de maneira prática e barata (no caso, sem custos) encontrei o &lt;a href="http://docs.getpelican.com/en/stable/" target="_blank"&gt;Pelican&lt;/a&gt;.
 O Pelican é um gerador de páginas estáticas feito em Python. Com ele não é necessário utilizar outras ferramentas como Django, Web2Py ou Wordpress. Como não precisa utilizar banco de dados (é apenas HTML estático) o conteúdo do blog fica em documentos de texto, facilitando qualquer futura migração.&lt;/p&gt;
 &lt;p&gt;Para hospedar o blog optei por utilizar o &lt;a href="https://pages.github.com/" target="_blank"&gt;GitHub Pages&lt;/a&gt;. É uma opção gratuíta que permite utilizar domínio próprio além de facilitar pois publico meu blog utilizando o git.&lt;/p&gt;
 &lt;p&gt;Para utilizar o Pelican é recomendado criar um ambiente virtual. Utilizei o &lt;a href="https://www.anaconda.com/" target="_blank"&gt;Anaconda&lt;/a&gt; para criar o ambiente virtual (mas pode ser utilizado o virtualenv também):&lt;/p&gt;

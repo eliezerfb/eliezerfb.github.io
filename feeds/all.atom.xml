@@ -177,40 +177,40 @@ Isso é util quando for inserir uma aspa dentro de uma string. Três aspas podem
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;T
-r
-u
-l
-y&lt;/p&gt;
-&lt;p&gt;w
-o
-n
-d
-e
-r
-f
-u
-l
-,&lt;/p&gt;
-&lt;p&gt;t
-h
-e&lt;/p&gt;
-&lt;p&gt;m
-i
-n
-d&lt;/p&gt;
-&lt;p&gt;o
-f&lt;/p&gt;
-&lt;p&gt;a&lt;/p&gt;
-&lt;p&gt;c
-h
-i
-l
-d&lt;/p&gt;
-&lt;p&gt;i
-s
-.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://github.com/eliezerfb/python_tests/blob/master/manipulacao_strings/Manipula%C3%A7%C3%A3o%20de%20Strings.ipynb"&gt;Estes exemplos estão disponíveis em meu repositório do GitHub&lt;/a&gt;&lt;/p&gt;</content><category term="python"></category><category term="strings"></category><category term="dicas"></category></entry><entry><title>Dicas de Data Cleaning</title><link href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="alternate"></link><published>2018-03-31T20:23:00-03:00</published><updated>2018-04-02T21:07:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/dicas-cata-cleaning.html</id><summary type="html">&lt;p&gt;Algumas dicas e para efetuar limpeza em dados&lt;/p&gt;</summary><content type="html">&lt;p&gt;O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.&lt;/p&gt;
+&lt;p&gt;T&lt;br&gt;
+r&lt;br&gt;
+u&lt;br&gt;
+l&lt;br&gt;
+y  &lt;/p&gt;
+&lt;p&gt;w&lt;br&gt;
+o&lt;br&gt;
+n&lt;br&gt;
+d&lt;br&gt;
+e&lt;br&gt;
+r&lt;br&gt;
+f&lt;br&gt;
+u&lt;br&gt;
+l&lt;br&gt;
+,  &lt;/p&gt;
+&lt;p&gt;t&lt;br&gt;
+h&lt;br&gt;
+e  &lt;/p&gt;
+&lt;p&gt;m&lt;br&gt;
+i&lt;br&gt;
+n&lt;br&gt;
+d  &lt;/p&gt;
+&lt;p&gt;o&lt;br&gt;
+f  &lt;/p&gt;
+&lt;p&gt;a  &lt;/p&gt;
+&lt;p&gt;c&lt;br&gt;
+h&lt;br&gt;
+i&lt;br&gt;
+l&lt;br&gt;
+d  &lt;/p&gt;
+&lt;p&gt;i&lt;br&gt;
+s&lt;br&gt;
+.  &lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/eliezerfb/python_tests/blob/master/manipulacao_strings/Manipula%C3%A7%C3%A3o%20de%20Strings.ipynb" target="_blank"&gt;Estes exemplos também estão disponíveis em meu repositório do GitHub&lt;/a&gt;&lt;/p&gt;</content><category term="python"></category><category term="strings"></category><category term="dicas"></category></entry><entry><title>Dicas de Data Cleaning</title><link href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="alternate"></link><published>2018-03-31T20:23:00-03:00</published><updated>2018-04-02T21:07:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-03-31:/dicas-cata-cleaning.html</id><summary type="html">&lt;p&gt;Algumas dicas e para efetuar limpeza em dados&lt;/p&gt;</summary><content type="html">&lt;p&gt;O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.&lt;/p&gt;
 &lt;h1&gt;Manipulação de Dados Faltantes&lt;/h1&gt;
 &lt;p&gt;Para obter o número de pontos de dados perdidos por coluna, podemos utilizar o código:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;missing_values_count = df.isnull().sum()
