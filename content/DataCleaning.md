@@ -3,11 +3,11 @@ Date: 2018-03-31 20:23
 Modified: 2018-04-02 21:07
 Category: Data Science
 Tags: data science, data cleaning, 
-Slug: dicas-cata-cleaning
+Slug: dicas-data-cleaning
 Authors: Eliézer
 Summary: Algumas dicas e para efetuar limpeza em dados
 
-O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.
+O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados (Dasu e Johnson 2003). Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.
 
 # Manipulação de Dados Faltantes
 
