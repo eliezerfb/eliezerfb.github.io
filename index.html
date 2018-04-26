@@ -22,7 +22,174 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/dicas-strings.html">Dicas de manipulação de Strings em Python</a></h1>
+                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/data-cleaning-marca-veiculo.html">Data Cleaning em marcas de veículos</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-04-26T18:58:00-03:00">
+                Published: Qui 26 abril 2018
+        </abbr>
+		<br />
+        <abbr class="modified" title="2018-04-26T18:58:00-03:00">
+                Updated: Qui 26 abril 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
+        </address>
+<p>In <a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a>.</p>
+<p>tags: <a href="http://eliezerfb.eti.br/tag/data-science.html">data science</a> <a href="http://eliezerfb.eti.br/tag/data-cleaning.html">data cleaning</a> </p>
+</footer><!-- /.post-info --><p>Em ciência de dados é comum encontrar datasets onde é necessário realizar algum trabalho de limpeza de dados. Seja por erros de digitação ou algum problema na coleta de dados. Costuma-se dizer que 80% da análise de dados é gasto no processo de limpeza e preparação dos dados, (Dasu e Johnson 2003).</p>
+<p>Neste post mostro um exemplo de limpeza de dados em um caso onde foi necessário realizar a padronização de nomes de marcas de veículos (caminhões e carretas). Por desconhecimento ao realizar o cadastros dos veículos em um sistema os usuário acabaram informando o modelo do veículo no mesmo campo da marca. Neste dataset existem 898 veículos, sendo que em 49% apresentavam este problema.</p>
+<p>A primeira coisa a ser feitas foi verificar quantas formas únicas existiam:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</pre></div>
+
+
+<p>No total haviam 214 tipos diferentes de marcas cadastradas, onde além do problema do modelo misturado com a marca, havia também problemas na ortografia (exemplo: 'MERCEDES BENZ', 'MERCEDES-BENZ', 'MERCEDES BENZA', 'MERCEDZ BENS’).</p>
+<p>Para começar a limpeza a primeira coisa removi os números e caracteres estranhos encontrados:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^A-Za-z]+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>E substituí os valores nulos por espaço em branco: </p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Para ajudar a remover as letras isoladas que restaram, também adicionei espaços em branco extra:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; &#39;</span>
+</pre></div>
+
+
+<p>Apenas com esse tratamento já foi possível reduzir de 214 para 157 marcas únicas.</p>
+<p>Normalmente as marcas possuem mais de 3 caracteres, com algumas exceções como 'MAN', 'DAF', 'MWM', 'VW' e 'M' (Sendo que ‘M’ se refere a MERCEDES-BENZ). O restante eliminei pois se tratavam de siglas que não deveriam de ser informadas:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">replacevalues</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">search</span><span class="p">,</span> <span class="n">replace</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">search</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">item</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">replace</span><span class="p">)</span>
+
+<span class="n">dont_remove</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MAN&#39;</span><span class="p">,</span> <span class="s1">&#39;DAF&#39;</span><span class="p">,</span> <span class="s1">&#39;MWM&#39;</span><span class="p">,</span> <span class="s1">&#39;VW&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">]</span>
+
+<span class="c1"># Para o restante das marcas, cria uma lista para remoção</span>
+<span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()]</span>
+<span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">remove</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+<span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">remove</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dont_remove</span><span class="p">]</span>
+
+<span class="n">replacevalues</span><span class="p">(</span><span class="n">df_veiculos</span><span class="p">,</span> <span class="s1">&#39;MARCA&#39;</span><span class="p">,</span> <span class="n">remove</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Depois disso, verifiquei que algumas palavras que tinham mais que 3 caracteres, deveriam ser removidas também:</p>
+<div class="highlight"><pre><span></span><span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SRCA&#39;</span><span class="p">,</span> <span class="s1">&#39;SRCS&#39;</span><span class="p">,</span> <span class="s1">&#39;PRANCHA&#39;</span><span class="p">,</span> <span class="s1">&#39;SRFG&#39;</span><span class="p">,</span> <span class="s1">&#39;STRALIS&#39;</span><span class="p">,</span> <span class="s1">&#39;CARGA&#39;</span><span class="p">,</span> <span class="s1">&#39;CARGO&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;AXOR&#39;</span><span class="p">,</span> <span class="s1">&#39;ATEGO&#39;</span><span class="p">,</span> <span class="s1">&#39;ACTROS&#39;</span><span class="p">,</span> <span class="s1">&#39;ABERT&#39;</span><span class="p">,</span> <span class="s1">&#39;CHARGER&#39;</span><span class="p">,</span> <span class="s1">&#39;STRALYS&#39;</span><span class="p">,</span> <span class="s1">&#39;SYDER&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;PORTA CONTAINER&#39;</span><span class="p">,</span> <span class="s1">&#39;CAVALO&#39;</span><span class="p">,</span> <span class="s1">&#39;SEMI REBOQUE&#39;</span><span class="p">,</span> <span class="s1">&#39;TRUCK&#39;</span><span class="p">,</span> <span class="s1">&#39;REBOQUE&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;TRAC TRATOR&#39;</span><span class="p">]</span>
+<span class="n">replacevalues</span><span class="p">(</span><span class="n">df_veiculos</span><span class="p">,</span> <span class="s1">&#39;MARCA&#39;</span><span class="p">,</span> <span class="n">remove</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Após, removi os espaços em branco extras:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Nesse momento o número de marcas únicas reduziu para 57.</p>
+<p>Algumas inconsistências tiveram de ser corrigidas de forma direta. Algumas abreviações, erros muito grandes ou duas marcas para o mesmo veículo:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s1">&#39;VOLKSWAGEN MAN&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;VOLKS MAN&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;VOLKS&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;VW MWM&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;VW&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;M BENZ&#39;</span><span class="p">:</span> <span class="s1">&#39;MERCEDES-BENZ&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;MERCEDES&#39;</span><span class="p">:</span> <span class="s1">&#39;MERCEDES-BENZ&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;SCANIA RANDON&#39;</span><span class="p">:</span> <span class="s1">&#39;SCANIA&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;NOPIA&#39;</span><span class="p">:</span> <span class="s1">&#39;NOMA&#39;</span><span class="p">},</span>
+                             <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Chegou-se assim no seguinte conjunto de marcas:</p>
+<div class="highlight"><pre><span></span>       <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span> <span class="s1">&#39;GUERRA&#39;</span><span class="p">,</span> <span class="s1">&#39;SCANIA&#39;</span><span class="p">,</span> <span class="s1">&#39;MERCEDES BENZ&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;LOIBRELATTO&#39;</span><span class="p">,</span> <span class="s1">&#39;FACCHINI&#39;</span><span class="p">,</span> <span class="s1">&#39;RANDON&#39;</span><span class="p">,</span> <span class="s1">&#39;LIBRELATTO&#39;</span><span class="p">,</span> <span class="s1">&#39;FORD&#39;</span><span class="p">,</span> <span class="s1">&#39;VOLVO&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;FACHINI&#39;</span><span class="p">,</span> <span class="s1">&#39;JARDINOX&#39;</span><span class="p">,</span> <span class="s1">&#39;RECRUSUL&#39;</span><span class="p">,</span> <span class="s1">&#39;MERCEDES-BENZ&#39;</span><span class="p">,</span> <span class="s1">&#39;IVECO&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;KRONE&#39;</span><span class="p">,</span> <span class="s1">&#39;MAN&#39;</span><span class="p">,</span> <span class="s1">&#39;TRIEL&#39;</span><span class="p">,</span> <span class="s1">&#39;RODOLINEA&#39;</span><span class="p">,</span> <span class="s1">&#39;FIBRASIL&#39;</span><span class="p">,</span> <span class="s1">&#39;NOMA&#39;</span><span class="p">,</span> <span class="s1">&#39;SOUFER&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;SCHIFFER&#39;</span><span class="p">,</span> <span class="s1">&#39;RANSON&#39;</span><span class="p">,</span> <span class="s1">&#39;LIBRELATO&#39;</span><span class="p">,</span> <span class="s1">&#39;MARINO&#39;</span><span class="p">,</span> <span class="s1">&#39;GURRA&#39;</span><span class="p">,</span> <span class="s1">&#39;MANN&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;MERCEDZ BENS&#39;</span><span class="p">,</span> <span class="s1">&#39;FACCHINI TANQUE&#39;</span><span class="p">,</span> <span class="s1">&#39;FACCIHINI&#39;</span><span class="p">,</span> <span class="s1">&#39;RANDONSP&#39;</span><span class="p">,</span> <span class="s1">&#39;GUERA&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;ELLFEN&#39;</span><span class="p">,</span> <span class="s1">&#39;LIBERATO&#39;</span><span class="p">,</span> <span class="s1">&#39;DAF&#39;</span><span class="p">,</span> <span class="s1">&#39;VOVLO&#39;</span><span class="p">,</span> <span class="s1">&#39;IDAF&#39;</span><span class="p">,</span> <span class="s1">&#39;MERCEDES BENZA&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;RANDN&#39;</span><span class="p">,</span> <span class="s1">&#39;FACCHIN&#39;</span><span class="p">,</span> <span class="s1">&#39;VOLKSWAGEM&#39;</span><span class="p">,</span> <span class="s1">&#39;RAMDON&#39;</span><span class="p">,</span> <span class="s1">&#39;RODOTECNICA&#39;</span><span class="p">,</span> <span class="s1">&#39;FORS&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;THERMOSUL&#39;</span><span class="p">,</span> <span class="s1">&#39;NOMAQ&#39;</span><span class="p">,</span> <span class="s1">&#39;FACHIN&#39;</span><span class="p">]</span>
+</pre></div>
+
+
+<p>Já é possível perceber uma significativa melhora. Agora só resta algumas marcas com erros de grafia. Para corrigir isso utilizei a biblioteca <em>fuzzywuzzy</em>. Com base em uma lista de marcas corretas, esta biblioteca permite realizar uma comparação e se determinada string possuir uma semelhança mínima ela é substituída. Eu utilizei uma taxa de semelhança 70%, visto que marcas normalmente possuem diferenças significativas em sua grafia. Em outros casos é necessário utilizar taxas maiores.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">replace_matches_in_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">string_to_match</span><span class="p">,</span> <span class="n">min_ratio</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">only_test</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="c1"># function to replace rows in the provided column of the provided dataframe</span>
+    <span class="c1"># that match the provided string above the provided ratio with</span>
+    <span class="c1"># the provided string</span>
+
+    <span class="c1"># get a list of unique strings</span>
+    <span class="n">strings</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+    <span class="c1"># get the top 10 closest matches to our input string</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">fuzzywuzzy</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">string_to_match</span><span class="p">,</span> <span class="n">strings</span><span class="p">,</span>
+                                         <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                         <span class="n">scorer</span><span class="o">=</span><span class="n">fuzzywuzzy</span><span class="o">.</span><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">)</span>
+
+    <span class="c1"># only get matches with a ratio &gt; x</span>
+    <span class="n">close_matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">matches</span> <span class="ow">in</span> <span class="n">matches</span> <span class="k">if</span> <span class="n">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_ratio</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">close_matches</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">string_to_match</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">close_matches</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">only_test</span><span class="p">):</span>
+        <span class="c1"># get the rows of all the close matches in our dataframe</span>
+        <span class="n">rows_with_matches</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">close_matches</span><span class="p">)</span>
+
+        <span class="c1"># replace all rows with close matches with the input matches</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rows_with_matches</span><span class="p">,</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">string_to_match</span>
+
+<span class="k">for</span> <span class="n">marca</span> <span class="ow">in</span> <span class="n">df_marcas_ok</span><span class="p">[</span><span class="s1">&#39;NOME&#39;</span><span class="p">]:</span>
+    <span class="n">replace_matches_in_column</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_veiculos</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;MARCA&#39;</span><span class="p">,</span> 
+                              <span class="n">string_to_match</span><span class="o">=</span><span class="n">marca</span><span class="p">,</span> <span class="n">min_ratio</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Finalmente, chegou-se ao número de 25 marcas únicas, que corresponde uma redução de 88%. Nos veículos que apenas foi informado o modelo do veículo foi necessário uma rápida pesquisa na internet e definiu-se manualmente:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="p">,</span> <span class="n">marca</span><span class="p">):</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;CODIGO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">codigos</span><span class="p">)</span>
+    <span class="n">df_veiculos</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">marca</span>
+
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">57</span><span class="p">,</span> <span class="mi">392</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;VOLVO&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">544</span><span class="p">,</span> <span class="mi">609</span><span class="p">,</span> <span class="mi">696</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span> <span class="mi">880</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;MERCEDES-BENZ&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">165</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;IVECO&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">202</span><span class="p">,</span> <span class="mi">282</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;FORD&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">792</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;SCANIA&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">72</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;GUERRA&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">213</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;LIBRELATTO&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Já os veículos que originalmente não possuíam esta informação, foi definido como marca não especificada:</p>
+<div class="highlight"><pre><span></span><span class="n">nao_especificado</span> <span class="o">=</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">][</span><span class="s1">&#39;CODIGO&#39;</span><span class="p">]</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="n">nao_especificado</span><span class="p">,</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;NAO ESPEC.&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Considerando no total do dataset, os veículos com problema na marca caíram de 49% para 7%. Somente ficaram sem a informação da marca os veículos que originalmente não possuíam essa informação.</p>
+<p>Dificilmente algum dataset no mundo real é perfeito, livre de problemas. A etapa de higienização dos dados é muito importante para que a análise seja realizada de forma correta. Apesar deste código estar de forma linear, este foi um processo cíclico onde o resultado final era avaliado e melhorado.</p>
+<p>O código completo está disponível no <a href="https://github.com/eliezerfb/data-cleaning/tree/master/marcas-veiculos">GitHub</a>.</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://eliezerfb.eti.br/dicas-strings.html" rel="bookmark"
+                           title="Permalink to Dicas de manipulação de Strings em Python">Dicas de manipulação de Strings em Python</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2018-04-21T19:23:00-03:00">
                 Published: Sáb 21 abril 2018
@@ -37,227 +204,14 @@
         </address>
 <p>In <a href="http://eliezerfb.eti.br/category/python.html">Python</a>.</p>
 <p>tags: <a href="http://eliezerfb.eti.br/tag/python.html">python</a> <a href="http://eliezerfb.eti.br/tag/strings.html">strings</a> <a href="http://eliezerfb.eti.br/tag/dicas.html">dicas</a> </p>
-</footer><!-- /.post-info --><h1>Aspas</h1>
-<p>Aspas simples e duplas são tratadas da mesma forma em Python. Não há diferença.
-Isso é util quando for inserir uma aspa dentro de uma string. Três aspas podem ser utilizadas para strings muito grandes.</p>
-<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&quot;Heeded my words not, did you?</span>
-<span class="s1">     Pass on what you have learned.</span>
-<span class="s1">     Strength, mastery. But weakness, folly, failure also.</span>
-<span class="s1">     Yes, failure most of all.</span>
-<span class="s1">     The greatest teacher, failure is.</span>
-<span class="s1">     Luke, we are what they grow beyond.</span>
-<span class="s1">     That is the true burden of all masters.&quot;</span>
-<span class="s1">     — Master Yoda&#39;&#39;&#39;</span><span class="p">)</span>
-</pre></div>
-
-
-<h1>True ou False?</h1>
-<p>Quando uma string é vazia ela retorna False e True quando está preenchida.</p>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;May the Force be with you.&quot;</span>
-<span class="k">if</span> <span class="n">s</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Tem conteúdo!&quot;</span><span class="p">)</span>
-
-<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Está vazio&quot;</span><span class="p">)</span>
-</pre></div>
-
-
-<h1>Adição e multiplicação de Strings</h1>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39; the &#39;</span>
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Fell&#39;</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s1">&#39;Force.&#39;</span><span class="p">)</span>
-</pre></div>
-
-
-<p><code>Fell the Force.</code></p>
-<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
-</pre></div>
-
-
-<p><code>**************************************************</code></p>
-<h1>Interpolação de Strings</h1>
-<h2>Utilizando %</h2>
-<p>É a forma mais antiga. Não é muito usado atualmente.</p>
-<div class="highlight"><pre><span></span><span class="n">j</span> <span class="o">=</span> <span class="s1">&#39;Jedi&#39;</span>
-<span class="n">f</span> <span class="o">=</span> <span class="s1">&#39;Force&#39;</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">j</span><span class="p">)</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A </span><span class="si">%s</span><span class="s2"> uses the </span><span class="si">%s</span><span class="s2"> for knowledge and defense, never for attack.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A </span><span class="si">%(x)s</span><span class="s2"> uses the </span><span class="si">%(y)s</span><span class="s2"> for knowledge and defense, never for attack.&quot;</span> <span class="o">%</span> <span class="p">({</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">j</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">f</span><span class="p">}))</span>
-
-<span class="s1">&#39;A Jedi uses the Force for knowledge and defense, never for attack.&#39;</span>
-</pre></div>
-
-
-<h2>Utilizando .format()</h2>
-<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;A {} uses the {} for knowledge and defense, never for attack.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A {x} uses the {y} for knowledge and defense, never for attack.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">j</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">f</span><span class="p">))</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A {0} uses the {1} for knowledge and defense, never for attack.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
-
-<span class="s1">&#39;A Jedi uses the Force for knowledge and defense, never for attack.&#39;</span>
-</pre></div>
-
-
-<h2>Utilizando f-strings</h2>
-<p>A partir do Python 3.6, onde você pode utilizar as variáveis diretamente dentro da String.</p>
-<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;A {j} uses the {f} for knowledge and defense, never for attack.&quot;</span><span class="p">)</span>
-<span class="s1">&#39;A Jedi uses the Force for knowledge and defense, never for attack.&#39;</span>
-
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;A {j.upper()} uses the {f.upper()} for knowledge and defense, never for attack.&quot;</span><span class="p">)</span>
-<span class="s1">&#39;A JEDI uses the FORCE for knowledge and defense, never for attack.&#39;</span>
-</pre></div>
-
-
-<h1>Inspeção de Conteúdo</h1>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Feel the Force&quot;</span>
-
-<span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="mi">14</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Feel&#39;</span><span class="p">)</span>
-<span class="bp">True</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;Force&#39;</span><span class="p">)</span>
-<span class="bp">True</span>
-
-<span class="s2">&quot;the&quot;</span> <span class="ow">in</span> <span class="n">s</span>
-<span class="bp">True</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Force&#39;</span><span class="p">)</span>
-<span class="mi">9</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;the&#39;</span><span class="p">)</span>
-<span class="mi">5</span>
-</pre></div>
-
-
-<h1>Slicing</h1>
-<p>Dividindo strings</p>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Patience you must have my young Padawan.&#39;</span>
-
-<span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="s1">&#39;P&#39;</span>
-
-<span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
-<span class="s1">&#39;Patience&#39;</span>
-
-<span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-<span class="s1">&#39;n&#39;</span>
-
-<span class="n">s</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="s1">&#39;.nawadaP gnuoy ym evah tsum uoy ecneitaP&#39;</span>
-</pre></div>
-
-
-<h1>Transformação</h1>
-<div class="highlight"><pre><span></span><span class="s1">&#39;fell the force.&#39;</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
-<span class="s1">&#39;Fell The Force.&#39;</span>
-
-<span class="s1">&#39;fell the force.&#39;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
-<span class="s1">&#39;Fell the force.&#39;</span>
-
-<span class="s1">&#39;fell the force.&#39;</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-<span class="s1">&#39;FELL THE FORCE.&#39;</span>
-
-<span class="s1">&#39;FELL THE FORCE.&#39;</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-<span class="s1">&#39;fell the force.&#39;</span>
-
-<span class="s1">&#39;Fell The Force.&#39;</span><span class="o">.</span><span class="n">swapcase</span><span class="p">()</span>
-<span class="s1">&#39;fELL tHE fORCE.&#39;</span>
-
-<span class="s1">&#39;fell the force.&#39;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;force&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span>
-<span class="s1">&#39;fell the *.&#39;</span>
-
-<span class="s1">&#39;   fell the force.   &#39;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-<span class="s1">&#39;fell the force.&#39;</span>
-
-<span class="s1">&#39;   fell the force.   &#39;</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
-<span class="s1">&#39;fell the force.   &#39;</span>
-
-<span class="s1">&#39;   fell the force.   &#39;</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-<span class="s1">&#39;   fell the force.&#39;</span>
-
-<span class="s1">&#39;42&#39;</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="s1">&#39;0000000042&#39;</span>
-</pre></div>
-
-
-<h1>Listas e Strings</h1>
-<h2>De lista para string</h2>
-<div class="highlight"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Do.&#39;</span><span class="p">,</span> <span class="s1">&#39;Or&#39;</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="s1">&#39;not.&#39;</span><span class="p">,</span> <span class="s1">&#39;There&#39;</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="s1">&#39;try.&#39;</span><span class="p">]</span>
-<span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-<span class="s1">&#39;Do. Or do not. There is no try.&#39;</span>
-</pre></div>
-
-
-<h2>De String para lista</h2>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Do. Or do not. There is no try.&#39;</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-<span class="p">[</span><span class="s1">&#39;Do.&#39;</span><span class="p">,</span> <span class="s1">&#39;Or&#39;</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="s1">&#39;not.&#39;</span><span class="p">,</span> <span class="s1">&#39;There&#39;</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="s1">&#39;try.&#39;</span><span class="p">]</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">[</span><span class="s1">&#39;Do.&#39;</span><span class="p">,</span> <span class="s1">&#39;Or do not. There is no try.&#39;</span><span class="p">]</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-<span class="p">[</span><span class="s1">&#39;Do&#39;</span><span class="p">,</span> <span class="s1">&#39; Or do not&#39;</span><span class="p">,</span> <span class="s1">&#39; There is no try&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
-</pre></div>
-
-
-<h1>Iterar uma String</h1>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Truly wonderful, the mind of a child is.&#39;</span>
-<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-</pre></div>
-
-
-<p>T<br>
-r<br>
-u<br>
-l<br>
-y  </p>
-<p>w<br>
-o<br>
-n<br>
-d<br>
-e<br>
-r<br>
-f<br>
-u<br>
-l<br>
-,  </p>
-<p>t<br>
-h<br>
-e  </p>
-<p>m<br>
-i<br>
-n<br>
-d  </p>
-<p>o<br>
-f  </p>
-<p>a  </p>
-<p>c<br>
-h<br>
-i<br>
-l<br>
-d  </p>
-<p>i<br>
-s<br>
-.  </p>
-<p><a href="https://github.com/eliezerfb/python_tests/blob/master/manipulacao_strings/Manipula%C3%A7%C3%A3o%20de%20Strings.ipynb" target="_blank">Estes exemplos também estão disponíveis em meu repositório do GitHub</a></p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+</footer><!-- /.post-info -->                <p>Algumas dicas de manipulação de Strings em python</p>
+                <a class="readmore" href="http://eliezerfb.eti.br/dicas-strings.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://eliezerfb.eti.br/dicas-cata-cleaning.html" rel="bookmark"
+                    <h1><a href="http://eliezerfb.eti.br/dicas-data-cleaning.html" rel="bookmark"
                            title="Permalink to Dicas de Data Cleaning">Dicas de Data Cleaning</a></h1>
                 </header>
 
@@ -277,7 +231,7 @@ s<br>
 <p>In <a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a>.</p>
 <p>tags: <a href="http://eliezerfb.eti.br/tag/data-science.html">data science</a> <a href="http://eliezerfb.eti.br/tag/data-cleaning.html">data cleaning</a> </p>
 </footer><!-- /.post-info -->                <p>Algumas dicas e para efetuar limpeza em dados</p>
-                <a class="readmore" href="http://eliezerfb.eti.br/dicas-cata-cleaning.html">read more</a>
+                <a class="readmore" href="http://eliezerfb.eti.br/dicas-data-cleaning.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 

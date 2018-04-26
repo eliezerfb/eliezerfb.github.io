@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
         <meta charset="utf-8" />
-        <title>Eliézer Bourchardt Personal Blog - Eliézer</title>
+        <title>Data Cleaning em marcas de veículos</title>
         <link rel="stylesheet" href="http://eliezerfb.eti.br/theme/css/main.css" />
         <link href="http://eliezerfb.eti.br/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Eliézer Bourchardt Personal Blog Atom Feed" />
 
@@ -15,14 +15,19 @@
         <header id="banner" class="body">
                 <h1><a href="http://eliezerfb.eti.br/">Eliézer Bourchardt Personal Blog </a></h1>
                 <nav><ul>
-                    <li><a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a></li>
+                    <li class="active"><a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a></li>
                     <li><a href="http://eliezerfb.eti.br/category/python.html">Python</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="http://eliezerfb.eti.br/data-cleaning-marca-veiculo.html" rel="bookmark"
+           title="Permalink to Data Cleaning em marcas de veículos">Data Cleaning em marcas de veículos</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/data-cleaning-marca-veiculo.html">Data Cleaning em marcas de veículos</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2018-04-26T18:58:00-03:00">
                 Published: Qui 26 abril 2018
@@ -37,7 +42,7 @@
         </address>
 <p>In <a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a>.</p>
 <p>tags: <a href="http://eliezerfb.eti.br/tag/data-science.html">data science</a> <a href="http://eliezerfb.eti.br/tag/data-cleaning.html">data cleaning</a> </p>
-</footer><!-- /.post-info --><p>Em ciência de dados é comum encontrar datasets onde é necessário realizar algum trabalho de limpeza de dados. Seja por erros de digitação ou algum problema na coleta de dados. Costuma-se dizer que 80% da análise de dados é gasto no processo de limpeza e preparação dos dados, (Dasu e Johnson 2003).</p>
+</footer><!-- /.post-info -->      <p>Em ciência de dados é comum encontrar datasets onde é necessário realizar algum trabalho de limpeza de dados. Seja por erros de digitação ou algum problema na coleta de dados. Costuma-se dizer que 80% da análise de dados é gasto no processo de limpeza e preparação dos dados, (Dasu e Johnson 2003).</p>
 <p>Neste post mostro um exemplo de limpeza de dados em um caso onde foi necessário realizar a padronização de nomes de marcas de veículos (caminhões e carretas). Por desconhecimento ao realizar o cadastros dos veículos em um sistema os usuário acabaram informando o modelo do veículo no mesmo campo da marca. Neste dataset existem 898 veículos, sendo que em 49% apresentavam este problema.</p>
 <p>A primeira coisa a ser feitas foi verificar quantas formas únicas existiam:</p>
 <div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
@@ -176,92 +181,11 @@
 
 <p>Considerando no total do dataset, os veículos com problema na marca caíram de 49% para 7%. Somente ficaram sem a informação da marca os veículos que originalmente não possuíam essa informação.</p>
 <p>Dificilmente algum dataset no mundo real é perfeito, livre de problemas. A etapa de higienização dos dados é muito importante para que a análise seja realizada de forma correta. Apesar deste código estar de forma linear, este foi um processo cíclico onde o resultado final era avaliado e melhorado.</p>
-<p>O código completo está disponível no <a href="https://github.com/eliezerfb/data-cleaning/tree/master/marcas-veiculos">GitHub</a>.</p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+<p>O código completo está disponível no <a href="https://github.com/eliezerfb/data-cleaning/tree/master/marcas-veiculos">GitHub</a>.</p>
+    </div><!-- /.entry-content -->
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="http://eliezerfb.eti.br/dicas-strings.html" rel="bookmark"
-                           title="Permalink to Dicas de manipulação de Strings em Python">Dicas de manipulação de Strings em Python</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2018-04-21T19:23:00-03:00">
-                Published: Sáb 21 abril 2018
-        </abbr>
-		<br />
-        <abbr class="modified" title="2018-04-21T19:23:00-03:00">
-                Updated: Sáb 21 abril 2018
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
-        </address>
-<p>In <a href="http://eliezerfb.eti.br/category/python.html">Python</a>.</p>
-<p>tags: <a href="http://eliezerfb.eti.br/tag/python.html">python</a> <a href="http://eliezerfb.eti.br/tag/strings.html">strings</a> <a href="http://eliezerfb.eti.br/tag/dicas.html">dicas</a> </p>
-</footer><!-- /.post-info -->                <p>Algumas dicas de manipulação de Strings em python</p>
-                <a class="readmore" href="http://eliezerfb.eti.br/dicas-strings.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="http://eliezerfb.eti.br/dicas-data-cleaning.html" rel="bookmark"
-                           title="Permalink to Dicas de Data Cleaning">Dicas de Data Cleaning</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2018-03-31T20:23:00-03:00">
-                Published: Sáb 31 março 2018
-        </abbr>
-		<br />
-        <abbr class="modified" title="2018-04-02T21:07:00-03:00">
-                Updated: Seg 02 abril 2018
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
-        </address>
-<p>In <a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a>.</p>
-<p>tags: <a href="http://eliezerfb.eti.br/tag/data-science.html">data science</a> <a href="http://eliezerfb.eti.br/tag/data-cleaning.html">data cleaning</a> </p>
-</footer><!-- /.post-info -->                <p>Algumas dicas e para efetuar limpeza em dados</p>
-                <a class="readmore" href="http://eliezerfb.eti.br/dicas-data-cleaning.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="http://eliezerfb.eti.br/blog-python-pelican.html" rel="bookmark"
-                           title="Permalink to Um blog com Pelican e Github Pages">Um blog com Pelican e Github Pages</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2018-03-31T15:00:00-03:00">
-                Published: Sáb 31 março 2018
-        </abbr>
-		<br />
-        <abbr class="modified" title="2018-03-31T15:00:00-03:00">
-                Updated: Sáb 31 março 2018
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
-        </address>
-<p>In <a href="http://eliezerfb.eti.br/category/python.html">Python</a>.</p>
-<p>tags: <a href="http://eliezerfb.eti.br/tag/pelican.html">pelican</a> <a href="http://eliezerfb.eti.br/tag/publishing.html">publishing</a> <a href="http://eliezerfb.eti.br/tag/web.html">web</a> </p>
-</footer><!-- /.post-info -->                <p>Como utilizar o Pelican para criar um blog pessoal.</p>
-                <a class="readmore" href="http://eliezerfb.eti.br/blog-python-pelican.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>

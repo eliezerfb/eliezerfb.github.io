@@ -22,7 +22,174 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/dicas-cata-cleaning.html">Dicas de Data Cleaning</a></h1>
+                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/data-cleaning-marca-veiculo.html">Data Cleaning em marcas de veículos</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-04-26T18:58:00-03:00">
+                Published: Qui 26 abril 2018
+        </abbr>
+		<br />
+        <abbr class="modified" title="2018-04-26T18:58:00-03:00">
+                Updated: Qui 26 abril 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
+        </address>
+<p>In <a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a>.</p>
+<p>tags: <a href="http://eliezerfb.eti.br/tag/data-science.html">data science</a> <a href="http://eliezerfb.eti.br/tag/data-cleaning.html">data cleaning</a> </p>
+</footer><!-- /.post-info --><p>Em ciência de dados é comum encontrar datasets onde é necessário realizar algum trabalho de limpeza de dados. Seja por erros de digitação ou algum problema na coleta de dados. Costuma-se dizer que 80% da análise de dados é gasto no processo de limpeza e preparação dos dados, (Dasu e Johnson 2003).</p>
+<p>Neste post mostro um exemplo de limpeza de dados em um caso onde foi necessário realizar a padronização de nomes de marcas de veículos (caminhões e carretas). Por desconhecimento ao realizar o cadastros dos veículos em um sistema os usuário acabaram informando o modelo do veículo no mesmo campo da marca. Neste dataset existem 898 veículos, sendo que em 49% apresentavam este problema.</p>
+<p>A primeira coisa a ser feitas foi verificar quantas formas únicas existiam:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</pre></div>
+
+
+<p>No total haviam 214 tipos diferentes de marcas cadastradas, onde além do problema do modelo misturado com a marca, havia também problemas na ortografia (exemplo: 'MERCEDES BENZ', 'MERCEDES-BENZ', 'MERCEDES BENZA', 'MERCEDZ BENS’).</p>
+<p>Para começar a limpeza a primeira coisa removi os números e caracteres estranhos encontrados:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^A-Za-z]+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>E substituí os valores nulos por espaço em branco: </p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Para ajudar a remover as letras isoladas que restaram, também adicionei espaços em branco extra:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; &#39;</span>
+</pre></div>
+
+
+<p>Apenas com esse tratamento já foi possível reduzir de 214 para 157 marcas únicas.</p>
+<p>Normalmente as marcas possuem mais de 3 caracteres, com algumas exceções como 'MAN', 'DAF', 'MWM', 'VW' e 'M' (Sendo que ‘M’ se refere a MERCEDES-BENZ). O restante eliminei pois se tratavam de siglas que não deveriam de ser informadas:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">replacevalues</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">search</span><span class="p">,</span> <span class="n">replace</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">search</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">item</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">replace</span><span class="p">)</span>
+
+<span class="n">dont_remove</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MAN&#39;</span><span class="p">,</span> <span class="s1">&#39;DAF&#39;</span><span class="p">,</span> <span class="s1">&#39;MWM&#39;</span><span class="p">,</span> <span class="s1">&#39;VW&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">]</span>
+
+<span class="c1"># Para o restante das marcas, cria uma lista para remoção</span>
+<span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()]</span>
+<span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">remove</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+<span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">remove</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dont_remove</span><span class="p">]</span>
+
+<span class="n">replacevalues</span><span class="p">(</span><span class="n">df_veiculos</span><span class="p">,</span> <span class="s1">&#39;MARCA&#39;</span><span class="p">,</span> <span class="n">remove</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Depois disso, verifiquei que algumas palavras que tinham mais que 3 caracteres, deveriam ser removidas também:</p>
+<div class="highlight"><pre><span></span><span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SRCA&#39;</span><span class="p">,</span> <span class="s1">&#39;SRCS&#39;</span><span class="p">,</span> <span class="s1">&#39;PRANCHA&#39;</span><span class="p">,</span> <span class="s1">&#39;SRFG&#39;</span><span class="p">,</span> <span class="s1">&#39;STRALIS&#39;</span><span class="p">,</span> <span class="s1">&#39;CARGA&#39;</span><span class="p">,</span> <span class="s1">&#39;CARGO&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;AXOR&#39;</span><span class="p">,</span> <span class="s1">&#39;ATEGO&#39;</span><span class="p">,</span> <span class="s1">&#39;ACTROS&#39;</span><span class="p">,</span> <span class="s1">&#39;ABERT&#39;</span><span class="p">,</span> <span class="s1">&#39;CHARGER&#39;</span><span class="p">,</span> <span class="s1">&#39;STRALYS&#39;</span><span class="p">,</span> <span class="s1">&#39;SYDER&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;PORTA CONTAINER&#39;</span><span class="p">,</span> <span class="s1">&#39;CAVALO&#39;</span><span class="p">,</span> <span class="s1">&#39;SEMI REBOQUE&#39;</span><span class="p">,</span> <span class="s1">&#39;TRUCK&#39;</span><span class="p">,</span> <span class="s1">&#39;REBOQUE&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;TRAC TRATOR&#39;</span><span class="p">]</span>
+<span class="n">replacevalues</span><span class="p">(</span><span class="n">df_veiculos</span><span class="p">,</span> <span class="s1">&#39;MARCA&#39;</span><span class="p">,</span> <span class="n">remove</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Após, removi os espaços em branco extras:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Nesse momento o número de marcas únicas reduziu para 57.</p>
+<p>Algumas inconsistências tiveram de ser corrigidas de forma direta. Algumas abreviações, erros muito grandes ou duas marcas para o mesmo veículo:</p>
+<div class="highlight"><pre><span></span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s1">&#39;VOLKSWAGEN MAN&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;VOLKS MAN&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;VOLKS&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;VW MWM&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;VW&#39;</span><span class="p">:</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;M BENZ&#39;</span><span class="p">:</span> <span class="s1">&#39;MERCEDES-BENZ&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;MERCEDES&#39;</span><span class="p">:</span> <span class="s1">&#39;MERCEDES-BENZ&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;SCANIA RANDON&#39;</span><span class="p">:</span> <span class="s1">&#39;SCANIA&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;NOPIA&#39;</span><span class="p">:</span> <span class="s1">&#39;NOMA&#39;</span><span class="p">},</span>
+                             <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Chegou-se assim no seguinte conjunto de marcas:</p>
+<div class="highlight"><pre><span></span>       <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">,</span> <span class="s1">&#39;GUERRA&#39;</span><span class="p">,</span> <span class="s1">&#39;SCANIA&#39;</span><span class="p">,</span> <span class="s1">&#39;MERCEDES BENZ&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;LOIBRELATTO&#39;</span><span class="p">,</span> <span class="s1">&#39;FACCHINI&#39;</span><span class="p">,</span> <span class="s1">&#39;RANDON&#39;</span><span class="p">,</span> <span class="s1">&#39;LIBRELATTO&#39;</span><span class="p">,</span> <span class="s1">&#39;FORD&#39;</span><span class="p">,</span> <span class="s1">&#39;VOLVO&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;FACHINI&#39;</span><span class="p">,</span> <span class="s1">&#39;JARDINOX&#39;</span><span class="p">,</span> <span class="s1">&#39;RECRUSUL&#39;</span><span class="p">,</span> <span class="s1">&#39;MERCEDES-BENZ&#39;</span><span class="p">,</span> <span class="s1">&#39;IVECO&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;KRONE&#39;</span><span class="p">,</span> <span class="s1">&#39;MAN&#39;</span><span class="p">,</span> <span class="s1">&#39;TRIEL&#39;</span><span class="p">,</span> <span class="s1">&#39;RODOLINEA&#39;</span><span class="p">,</span> <span class="s1">&#39;FIBRASIL&#39;</span><span class="p">,</span> <span class="s1">&#39;NOMA&#39;</span><span class="p">,</span> <span class="s1">&#39;SOUFER&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;SCHIFFER&#39;</span><span class="p">,</span> <span class="s1">&#39;RANSON&#39;</span><span class="p">,</span> <span class="s1">&#39;LIBRELATO&#39;</span><span class="p">,</span> <span class="s1">&#39;MARINO&#39;</span><span class="p">,</span> <span class="s1">&#39;GURRA&#39;</span><span class="p">,</span> <span class="s1">&#39;MANN&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;MERCEDZ BENS&#39;</span><span class="p">,</span> <span class="s1">&#39;FACCHINI TANQUE&#39;</span><span class="p">,</span> <span class="s1">&#39;FACCIHINI&#39;</span><span class="p">,</span> <span class="s1">&#39;RANDONSP&#39;</span><span class="p">,</span> <span class="s1">&#39;GUERA&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;ELLFEN&#39;</span><span class="p">,</span> <span class="s1">&#39;LIBERATO&#39;</span><span class="p">,</span> <span class="s1">&#39;DAF&#39;</span><span class="p">,</span> <span class="s1">&#39;VOVLO&#39;</span><span class="p">,</span> <span class="s1">&#39;IDAF&#39;</span><span class="p">,</span> <span class="s1">&#39;MERCEDES BENZA&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;RANDN&#39;</span><span class="p">,</span> <span class="s1">&#39;FACCHIN&#39;</span><span class="p">,</span> <span class="s1">&#39;VOLKSWAGEM&#39;</span><span class="p">,</span> <span class="s1">&#39;RAMDON&#39;</span><span class="p">,</span> <span class="s1">&#39;RODOTECNICA&#39;</span><span class="p">,</span> <span class="s1">&#39;FORS&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;THERMOSUL&#39;</span><span class="p">,</span> <span class="s1">&#39;NOMAQ&#39;</span><span class="p">,</span> <span class="s1">&#39;FACHIN&#39;</span><span class="p">]</span>
+</pre></div>
+
+
+<p>Já é possível perceber uma significativa melhora. Agora só resta algumas marcas com erros de grafia. Para corrigir isso utilizei a biblioteca <em>fuzzywuzzy</em>. Com base em uma lista de marcas corretas, esta biblioteca permite realizar uma comparação e se determinada string possuir uma semelhança mínima ela é substituída. Eu utilizei uma taxa de semelhança 70%, visto que marcas normalmente possuem diferenças significativas em sua grafia. Em outros casos é necessário utilizar taxas maiores.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">replace_matches_in_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">string_to_match</span><span class="p">,</span> <span class="n">min_ratio</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">only_test</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="c1"># function to replace rows in the provided column of the provided dataframe</span>
+    <span class="c1"># that match the provided string above the provided ratio with</span>
+    <span class="c1"># the provided string</span>
+
+    <span class="c1"># get a list of unique strings</span>
+    <span class="n">strings</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+    <span class="c1"># get the top 10 closest matches to our input string</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">fuzzywuzzy</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">string_to_match</span><span class="p">,</span> <span class="n">strings</span><span class="p">,</span>
+                                         <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                         <span class="n">scorer</span><span class="o">=</span><span class="n">fuzzywuzzy</span><span class="o">.</span><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">)</span>
+
+    <span class="c1"># only get matches with a ratio &gt; x</span>
+    <span class="n">close_matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">matches</span> <span class="ow">in</span> <span class="n">matches</span> <span class="k">if</span> <span class="n">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_ratio</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">close_matches</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">string_to_match</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">close_matches</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">only_test</span><span class="p">):</span>
+        <span class="c1"># get the rows of all the close matches in our dataframe</span>
+        <span class="n">rows_with_matches</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">close_matches</span><span class="p">)</span>
+
+        <span class="c1"># replace all rows with close matches with the input matches</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rows_with_matches</span><span class="p">,</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">string_to_match</span>
+
+<span class="k">for</span> <span class="n">marca</span> <span class="ow">in</span> <span class="n">df_marcas_ok</span><span class="p">[</span><span class="s1">&#39;NOME&#39;</span><span class="p">]:</span>
+    <span class="n">replace_matches_in_column</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_veiculos</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;MARCA&#39;</span><span class="p">,</span> 
+                              <span class="n">string_to_match</span><span class="o">=</span><span class="n">marca</span><span class="p">,</span> <span class="n">min_ratio</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Finalmente, chegou-se ao número de 25 marcas únicas, que corresponde uma redução de 88%. Nos veículos que apenas foi informado o modelo do veículo foi necessário uma rápida pesquisa na internet e definiu-se manualmente:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="p">,</span> <span class="n">marca</span><span class="p">):</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;CODIGO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">codigos</span><span class="p">)</span>
+    <span class="n">df_veiculos</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">marca</span>
+
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">57</span><span class="p">,</span> <span class="mi">392</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;VOLVO&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">544</span><span class="p">,</span> <span class="mi">609</span><span class="p">,</span> <span class="mi">696</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;VOLKSWAGEN&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span> <span class="mi">880</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;MERCEDES-BENZ&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">165</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;IVECO&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">202</span><span class="p">,</span> <span class="mi">282</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;FORD&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">792</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;SCANIA&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">72</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;GUERRA&#39;</span><span class="p">)</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="p">[</span><span class="mi">213</span><span class="p">],</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;LIBRELATTO&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Já os veículos que originalmente não possuíam esta informação, foi definido como marca não especificada:</p>
+<div class="highlight"><pre><span></span><span class="n">nao_especificado</span> <span class="o">=</span> <span class="n">df_veiculos</span><span class="p">[</span><span class="n">df_veiculos</span><span class="p">[</span><span class="s1">&#39;MARCA&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">][</span><span class="s1">&#39;CODIGO&#39;</span><span class="p">]</span>
+<span class="n">set_marcas</span><span class="p">(</span><span class="n">codigos</span><span class="o">=</span><span class="n">nao_especificado</span><span class="p">,</span> <span class="n">marca</span><span class="o">=</span><span class="s1">&#39;NAO ESPEC.&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Considerando no total do dataset, os veículos com problema na marca caíram de 49% para 7%. Somente ficaram sem a informação da marca os veículos que originalmente não possuíam essa informação.</p>
+<p>Dificilmente algum dataset no mundo real é perfeito, livre de problemas. A etapa de higienização dos dados é muito importante para que a análise seja realizada de forma correta. Apesar deste código estar de forma linear, este foi um processo cíclico onde o resultado final era avaliado e melhorado.</p>
+<p>O código completo está disponível no <a href="https://github.com/eliezerfb/data-cleaning/tree/master/marcas-veiculos">GitHub</a>.</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://eliezerfb.eti.br/dicas-data-cleaning.html" rel="bookmark"
+                           title="Permalink to Dicas de Data Cleaning">Dicas de Data Cleaning</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2018-03-31T20:23:00-03:00">
                 Published: Sáb 31 março 2018
@@ -37,125 +204,12 @@
         </address>
 <p>In <a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a>.</p>
 <p>tags: <a href="http://eliezerfb.eti.br/tag/data-science.html">data science</a> <a href="http://eliezerfb.eti.br/tag/data-cleaning.html">data cleaning</a> </p>
-</footer><!-- /.post-info --><p>O processo de limpeza e preparação dos dados representa cerca de 80% do trabalho de um cientista de dados. Datas em diversos formatos, diversos encodings, dados incompletos, erros de digitação são muito comuns. Antes de realizar qualquer análise é necessário tratar estes problemas. Neste post reúno algumas dicas de pré-processamento que são úteis no dia-a-dia.</p>
-<h1>Manipulação de Dados Faltantes</h1>
-<p>Para obter o número de pontos de dados perdidos por coluna, podemos utilizar o código:</p>
-<div class="highlight"><pre><span></span>missing_values_count = df.isnull().sum()
-total_cells = np.product(df.shape)
-total_missing = missing_values_count.sum()
-print((total_missing/total_cells) * 100)
-</pre></div>
-
-
-<p>Também podemos visualizar os dados faltantes com a ajuda da biblioteca <a href="https://github.com/ResidentMario/missingno" target="_blank">missingno</a>. </p>
-<div class="highlight"><pre><span></span>pip install missingno
-</pre></div>
-
-
-<p>Esta biblioteca permite diversas visualizações, abaixo é possível ver um exemplo de código:    </p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quilt.data.ResidentMario</span> <span class="kn">import</span> <span class="n">missingno_data</span>
-<span class="n">collisions</span> <span class="o">=</span> <span class="n">missingno_data</span><span class="o">.</span><span class="n">nyc_injurious_collisions</span><span class="p">()</span>
-<span class="n">collisions</span> <span class="o">=</span> <span class="n">collisions</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">missingno</span> <span class="kn">as</span> <span class="nn">msno</span>
-<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-<span class="n">msno</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">collisions</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">250</span><span class="p">))</span>
-</pre></div>
-
-
-<p><img alt="msgno example" class="img-responsive" height="90%" src="/images/msgno.png" width="90%"></p>
-<p>Mas nem todos dados faltantes são erros. Nesse momento é necessário se perguntar: <strong>um dado faltante é porque não foi gravado ou porque não existe?</strong></p>
-<p>Se um valor é faltante porque ele não existe (como a altura do filho mais velho de quem não tem filhos), então não faz sentido tentar adivinhar este valor. Estes valores devem ser mantidos como NaN. Por outro lado, se um valor não existe porque não foi gravado, então podemos tentar adivinhar seu valor baseado em outros valores nesta coluna e linha. </p>
-<h2>Descartar valores ausentes</h2>
-<p>Se não houver uma razão para descobrir por que os valores estão faltando, uma opção é apenas remover as linhas ou colunas que contiverem valores ausentes. Porém esta abordagem não é muito recomendada, principalmente em projetos importantes. Vale a pena dedicar um tempo para analisar os dados e observar todas as colunas com valores ausentes um a um para realmente conhecer o dataset.  </p>
-<p>O código abaixo remove todas as linhas que contém um valor faltante:  </p>
-<div class="highlight"><pre><span></span>df.dropna()
-</pre></div>
-
-
-<p>E para remover todas as colunas que contiver um valor faltante, basta informar axis=1:  </p>
-<div class="highlight"><pre><span></span>df.dropna(axis=1)
-</pre></div>
-
-
-<h2>Preencher valores ausentes automáticamente</h2>
-<p>Outra opção é tentar preencher os valores ausentes. Para preencher todos NaN com zero:  </p>
-<div class="highlight"><pre><span></span>df.fillna(0)
-</pre></div>
-
-
-<p>Para um conjunto de dados que possuem uma ordem lógica pode ser feito dessa forma:  </p>
-<div class="highlight"><pre><span></span>df.fillna(method = &#39;bfill&#39;, axis=0).fillna(&quot;0&quot;)
-</pre></div>
-
-
-<p>O método bfill preenche os valores ausentes com qualquer valor que venha diretamente após ele na mesma coluna. Um exemplo de uso pode ser na observação de temperatura ou dados pluviométricos.  </p>
-<h1>Converter colunas date para datetime</h1>
-<p>Colunas tipo data que são reconhecidas como texto devem ser convertidas para ser reconhecidas como uma data. Este procedimento chama-se "parsing dates" porque nós pegamos uma string e indentificamos suas partes.<br>
-Para formatar as datas com o pandas nós utilizamos um guia chamado <a href="http://strftime.org" target="_blank">strftime directive</a>. A ideia básica é que você precisa indicar quais partes da data estão onde e qual pontuação está entre elas. Há muitas possibilidades de partes de data, mas a mais comum são %d para dia, %m para mês, %y para ano de dois dígitos e %Y para ano de quatro dígitos.  </p>
-<p>Alguns exemplos:</p>
-<ul>
-<li>1/17/07 tem o formato "%m/%d/%y"</li>
-<li>17-1-2007 tem o formato "%d-%m-%Y"</li>
-</ul>
-<p>Para converter uma coluna data:</p>
-<div class="highlight"><pre><span></span>df[&#39;date_parsed&#39;] = pd.to_datetime(df[&#39;date&#39;], format = &quot;%m/%d/%y&quot;)
-</pre></div>
-
-
-<p>Mesmo especificando o formato de data, às vezes obtém-se um erro quando houver vários formatos de data em umam única coluna. Se isso acontecer, pode tentarr utilizar o pandas para inferir qual deve ser o formato correto. Isso pode ser feito da seguinte maneira:</p>
-<div class="highlight"><pre><span></span>df[&#39;date_parsed&#39;] = pd.to_datetime(df[&#39;Date&#39;], infer_datetime_format=True)
-</pre></div>
-
-
-<p><strong>Porque não usar sempre infer_datetime_format = True?</strong> Há dois grandes motivos para não deixar o pandas adivinhar o formato da data/hora. A primeira é que o pandas nem sempre é capaz de descobrir o formato correto, especialmente se alguém foi criativo com a entrada de dados. A segunda é que é muito mais lento do que especificar o formato exato das datas.</p>
-<h2>Distribuição do dia do mês para checar a conversão de data</h2>
-<p>Um dos grandes perigos na conversão de datas é misturar os meses e dias. A função to_datetime() ajuda muito com as mensagens de erro, mesmo assim é boa ideia checar novamente se os dias dos meses extraídos fazem sentido.<br>
-Para fazer isso é possível fazer um gráfico de histograma com os dias do mês. É esperado termos valores distribuídos uniformemente entre 1 e 31, uma vez que não há razão que um dia seja mais comum que outro (exceto 31, pois nem todos os meses tem 31 dias). </p>
-<div class="highlight"><pre><span></span>day_of_month = df[&#39;date_parsed&#39;].dt.day
-day_of_month = day_of_month.dropna()
-sns.distplot(day_of_month, kde=False, bins=31)
-</pre></div>
-
-
-<p><img alt="plot days" class="img-responsive" src="/images/plot_days_month.png"></p>
-<h2>Codificação de caracteres</h2>
-<p>Codificação de caracteres (Character encodings) são conjuntos específicos de regras para mapeamento de sequências de bytes binários brutos (que se parece com isso: 0110100001101001) para caracteres que compõem o texto legível (como "oi"). Existem muitas codificações diferentes, e se você tentou ler em texto com uma codificação diferente da que foi originalmente escrita, você acabou com um texto embaralhado chamado "mojibake" (mo-gee-bah-kay). Aqui está um exemplo de mojibake:</p>
-<p>æ–‡å—åŒ–ã??</p>
-<p>Você também pode acabar com um caractere "desconhecido". Há o que é impresso quando não há mapeamento entre um byte específico e um caractere na codificação que você está usando para ler sua cadeia de bytes e eles se parecem com isso:</p>
-<p>����������</p>
-<p>UTF-8 é a codificação de texto padrão. Todo o código Python está em UTF-8 e, idealmente, todos os dados também devem estar.</p>
-<p>Para converter uma variável string para bytes:</p>
-<div class="highlight"><pre><span></span>before = &quot;This is the euro symbol: €&quot;
-after = before.encode(&quot;utf-8&quot;, errors = &quot;replace&quot;)
-</pre></div>
-
-
-<p>Ao imprimir a variável after fica da seguinte forma:</p>
-<div class="highlight"><pre><span></span>b&#39;This is the euro symbol: \xe2\x82\xac&#39;
-</pre></div>
-
-
-<p>Para visualizar o texto corretamente é necessário converter para string, da seguinte maneira:</p>
-<div class="highlight"><pre><span></span>print(after.decode(&quot;utf-8&quot;))
-</pre></div>
-
-
-<h2>Lendo arquivos com problemas de codificação</h2>
-<p>Para descobrir a codificação de um arquivo pode ser utilizado o seguinte código:</p>
-<div class="highlight"><pre><span></span>with open(&quot;ks-projects-201801.csv&quot;, &#39;rb&#39;) as rawdata:
-    print(chardet.detect(rawdata.read(10000)))
-</pre></div>
-
-
-<p>Resultando em:  </p>
-<p>'encoding': 'Windows-1252', 'confidence': 0.73, 'language': ''  </p>
-<p>Portanto, chardet tem 73% de confiança de que a codificação correta é "Windows-1252". Para carregar o arquivo com a codificação correta usando o pandas:</p>
-<div class="highlight"><pre><span></span>pd.read_csv(&quot;ks-projects-201612.csv&quot;, encoding=&#39;Windows-1252&#39;)
-</pre></div>
-
-
-<p>Este post foi baseado em <a href="https://www.kaggle.com/rtatman/data-cleaning-challenge-handling-missing-values" target="_blank">Data cleaning challenge by Kaggle</a>.</p>                </article>
-            </aside><!-- /#featured -->
+</footer><!-- /.post-info -->                <p>Algumas dicas e para efetuar limpeza em dados</p>
+                <a class="readmore" href="http://eliezerfb.eti.br/dicas-data-cleaning.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>
