@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+        <meta charset="utf-8" />
+        <title>Python e Twitter</title>
+        <link rel="stylesheet" href="http://eliezerfb.eti.br/theme/css/main.css" />
+        <link href="http://eliezerfb.eti.br/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Eliézer Bourchardt Personal Blog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://eliezerfb.eti.br/">Eliézer Bourchardt Personal Blog </a></h1>
+                <nav><ul>
+                    <li><a href="http://eliezerfb.eti.br/category/artigos.html">Artigos</a></li>
+                    <li><a href="http://eliezerfb.eti.br/category/data-science.html">Data Science</a></li>
+                    <li class="active"><a href="http://eliezerfb.eti.br/category/python.html">Python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="http://eliezerfb.eti.br/dicas-twitter.html" rel="bookmark"
+           title="Permalink to Python e Twitter">Python e Twitter</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-04-21T19:23:00-03:00">
+                Published: Sáb 21 abril 2018
+        </abbr>
+		<br />
+        <abbr class="modified" title="2018-04-21T19:23:00-03:00">
+                Updated: Sáb 21 abril 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
+        </address>
+<p>In <a href="http://eliezerfb.eti.br/category/python.html">Python</a>.</p>
+<p>tags: <a href="http://eliezerfb.eti.br/tag/python.html">python</a> <a href="http://eliezerfb.eti.br/tag/twitter.html">twitter</a> <a href="http://eliezerfb.eti.br/tag/dicas.html">dicas</a> </p>
+</footer><!-- /.post-info -->      <p>Neste exemplo vou mostrar como extrair dados do Twitter com o Python com a biblioteca <strong>python-twitter</strong>.  </p>
+<h1>Criar o Aplicativo no Twitter</h1>
+<p>O aplicativo no Twitter é necessário para realizar a autenticação no serviço, nada mais é que um conjunto de chaves que garantem a sua identificação.
+1) Acesse o <a href="https://apps.twitter.com/">Twitter Apps</a> com a sua conta no Twitter;<br>
+2) Clique na opção "Create New App" e digite os dados obrigatórios (Nome, Descrição e Site). Marque também a opção que você concorda com os termos do serviço;<br>
+3) Concluído o seu aplicativo vai estar disponível na tela principal, clique nele para abrir;<br>
+4) Clique em “Generate My Access Token and Token Secret”
+5) Na seção “Keys and Access Tokens” você vai encontrar os dados de autenticação (Consumer Key, Consumer Secret, Access Token, Access Token) Secret.  </p>
+<p>Lembre-se que estes dados são privados de sua conta no Twitter, nunca divulgue-os.</p>
+<h1>Instalação da biblioteca python-twitter</h1>
+<p>Vamos utilizar a biblioteca <a href="https://github.com/bear/python-twitter">python-twitter</a>, caso precisar você pode ler sua <a href="https://python-twitter.readthedocs.io/en/latest/">documentação</a>. Esta biblioteca é baseada na <a href="https://developer.twitter.com/en/docs">API do Twitter</a>.  </p>
+<h1>Criando um arquivo de configuração</h1>
+<p>Como não podemos manter os tokens diretamente no código, vamos criar um arquivo tokens.json, com a seguinte estrutura:</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;consumer_key&quot;</span> <span class="p">:</span> <span class="s2">&quot;seu_consumer_key&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;consumer_secret&quot;</span> <span class="p">:</span> <span class="s2">&quot;seu_consumer_secret&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;access_token_key&quot;</span> <span class="p">:</span> <span class="s2">&quot;seu_access_token_key&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;access_token_secret&quot;</span> <span class="p">:</span> <span class="s2">&quot;seu_access_token_secret&quot;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h1>Acessando a API do Twitter</h1>
+<p>1) Crie um arquivo .py e importe a biblioteca do twitter e json:  </p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">twitter</span>
+<span class="kn">import</span> <span class="nn">json</span>
+</pre></div>
+
+
+<p>2) Carregue o arquivo de configuração:  </p>
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;tokens.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+
+
+<p>3) Agora é só carregar a API do Twitter, utilizando os dados do arquivo json:  </p>
+<div class="highlight"><pre><span></span><span class="n">api</span> <span class="o">=</span> <span class="n">twitter</span><span class="o">.</span><span class="n">Api</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Pronto! Agora vamos testar se tudo está certo:  </p>
+<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">VerifyCredentials</span><span class="p">())</span>
+</pre></div>
+
+
+<p>Caso tiver alguma credencial errada, o resultado será:  </p>
+<div class="highlight"><pre><span></span><span class="n">twitter</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">TwitterError</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Could not authenticate you.&#39;</span><span class="p">}]</span>
+</pre></div>
+
+
+<h1>Realizando buscas no Twitter</h1>
+<p>A API do Twitter permite fazer diversos tipos de consultas. O retorno dessas consultas pode ser acessado facilmente.
+Vamos criar uma função que, a partir de uma lista de status, mostra o nome do usuário e o texto do twitter.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_status</span><span class="p">(</span><span class="n">status_list</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">status_list</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">text</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Poderíamos extrair outros dados, porém neste exemplo vamos restringir a apenas estes.  </p>
+<h2>Busca na timeline de um usuário</h2>
+<p>Podemos buscar todos os tweets de um da Timeline de um usuário:</p>
+<div class="highlight"><pre><span></span><span class="n">status_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">GetUserTimeline</span><span class="p">(</span><span class="n">screen_name</span><span class="o">=</span><span class="s1">&#39;RosieDaSerenata&#39;</span><span class="p">)</span>
+<span class="n">print_status</span><span class="p">(</span><span class="n">status_list</span><span class="o">=</span><span class="n">status_list</span><span class="p">)</span>
+</pre></div>
+
+
+<h2>Busca por termos</h2>
+<p>Ou fazer a busca por um termo específico, restringindo a quantidade de tweets, linguagem e mostrando apenas os mais recentes:  </p>
+<div class="highlight"><pre><span></span><span class="n">status_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">GetSearch</span><span class="p">(</span><span class="n">term</span><span class="o">=</span><span class="s2">&quot;Operação Serenata de Amor&quot;</span><span class="p">,</span>
+                            <span class="n">lang</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">,</span>
+                            <span class="n">count</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                            <span class="n">result_type</span><span class="o">=</span><span class="s1">&#39;recent&#39;</span><span class="p">)</span>
+<span class="n">print_status</span><span class="p">(</span><span class="n">status_list</span><span class="o">=</span><span class="n">status_list</span><span class="p">)</span>
+</pre></div>
+
+
+<h2>Busca georreferenciada</h2>
+<p>E ainda buscar tweets que estão georreferenciados:  </p>
+<div class="highlight"><pre><span></span><span class="n">status_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">GetSearch</span><span class="p">(</span><span class="n">geocode</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">27.231700</span><span class="p">,</span> <span class="o">-</span><span class="mf">52.023781</span><span class="p">,</span> <span class="s2">&quot;2km&quot;</span><span class="p">))</span>
+<span class="n">print_status</span><span class="p">(</span><span class="n">status_list</span><span class="o">=</span><span class="n">status_list</span><span class="p">)</span>
+</pre></div>
+
+
+<h1>Também é possível postar uma atualização</h1>
+<p>E é bem simples:  </p>
+<div class="highlight"><pre><span></span><span class="n">status</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">PostUpdate</span><span class="p">(</span><span class="s1">&#39;Testing python-twitter!!&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h1>E o que eu faço com isso?</h1>
+<p>As redes sociais são fontes valiosas de dados não estruturados para serem usados em Data Science, sendo um ótimo assunto para um próximo post!</p>
+<p>O código completo você pode ver no <a href="https://github.com/eliezerfb/python_tests/tree/master/twitter">GitHub</a>.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://eliezerfb.eti.br/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://www.linkedin.com/in/eliezer-bourchardt/">Linkedin</a></li>
+                            <li><a href="https://github.com/eliezerfb">GitHub</a></li>
+                            <li><a href="https://twitter.com/eliezerfb">Twitter</a></li>
+                            <li><a href="https://www.facebook.com/eliezer.bourchardt">Facebook</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-11089775-4', 'auto');
+    ga('send', 'pageview');
+    </script>
+</body>
+</html>
