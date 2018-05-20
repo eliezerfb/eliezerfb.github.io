@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Eliézer Bourchardt Personal Blog - Python</title><link href="http://eliezerfb.eti.br/" rel="alternate"></link><link href="http://eliezerfb.eti.br/feeds/python.atom.xml" rel="self"></link><id>http://eliezerfb.eti.br/</id><updated>2018-05-20T09:06:00-03:00</updated><entry><title>Python e Twitter</title><link href="http://eliezerfb.eti.br/dicas-twitter.html" rel="alternate"></link><published>2018-05-20T09:06:00-03:00</published><updated>2018-05-20T09:06:00-03:00</updated><author><name>Eliézer</name></author><id>tag:eliezerfb.eti.br,2018-05-20:/dicas-twitter.html</id><summary type="html">&lt;p&gt;Algumas dicas de como extrair dados do Twitter com Python&lt;/p&gt;</summary><content type="html">&lt;p&gt;Neste exemplo vou mostrar como extrair dados do Twitter com o Python com a biblioteca &lt;strong&gt;python-twitter&lt;/strong&gt;.  &lt;/p&gt;
 &lt;h1&gt;Criar o Aplicativo no Twitter&lt;/h1&gt;
-&lt;p&gt;O aplicativo no Twitter é necessário para realizar a autenticação no serviço, nada mais é que um conjunto de chaves que garantem a sua identificação.
+&lt;p&gt;O aplicativo no Twitter é necessário para realizar a autenticação no serviço, nada mais é que um conjunto de chaves que garantem a sua identificação.&lt;br&gt;
 1) Acesse o &lt;a href="https://apps.twitter.com/"&gt;Twitter Apps&lt;/a&gt; com a sua conta no Twitter;&lt;br&gt;
 2) Clique na opção "Create New App" e digite os dados obrigatórios (Nome, Descrição e Site). Marque também a opção que você concorda com os termos do serviço;&lt;br&gt;
 3) Concluído o seu aplicativo vai estar disponível na tela principal, clique nele para abrir;&lt;br&gt;
-4) Clique em “Generate My Access Token and Token Secret”
+4) Clique em “Generate My Access Token and Token Secret”;&lt;br&gt;
 5) Na seção “Keys and Access Tokens” você vai encontrar os dados de autenticação (Consumer Key, Consumer Secret, Access Token, Access Token) Secret.  &lt;/p&gt;
 &lt;p&gt;Lembre-se que estes dados são privados de sua conta no Twitter, nunca divulgue-os.&lt;/p&gt;
 &lt;h1&gt;Instalação da biblioteca python-twitter&lt;/h1&gt;
