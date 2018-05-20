@@ -23,233 +23,114 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/dicas-strings.html">Dicas de manipulação de Strings em Python</a></h1>
+                    <h1 class="entry-title"><a href="http://eliezerfb.eti.br/dicas-twitter.html">Python e Twitter</a></h1>
 <footer class="post-info">
-        <abbr class="published" title="2018-04-21T19:23:00-03:00">
-                Published: Sáb 21 abril 2018
+        <abbr class="published" title="2018-05-20T09:06:00-03:00">
+                Published: Dom 20 maio 2018
         </abbr>
 		<br />
-        <abbr class="modified" title="2018-04-21T19:23:00-03:00">
-                Updated: Sáb 21 abril 2018
+        <abbr class="modified" title="2018-05-20T09:06:00-03:00">
+                Updated: Dom 20 maio 2018
         </abbr>
 
         <address class="vcard author">
                 By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
         </address>
 <p>In <a href="http://eliezerfb.eti.br/category/python.html">Python</a>.</p>
-<p>tags: <a href="http://eliezerfb.eti.br/tag/python.html">python</a> <a href="http://eliezerfb.eti.br/tag/strings.html">strings</a> <a href="http://eliezerfb.eti.br/tag/dicas.html">dicas</a> </p>
-</footer><!-- /.post-info --><h1>Aspas</h1>
-<p>Aspas simples e duplas são tratadas da mesma forma em Python. Não há diferença.
-Isso é util quando for inserir uma aspa dentro de uma string. Três aspas podem ser utilizadas para strings muito grandes.</p>
-<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&quot;Heeded my words not, did you?</span>
-<span class="s1">     Pass on what you have learned.</span>
-<span class="s1">     Strength, mastery. But weakness, folly, failure also.</span>
-<span class="s1">     Yes, failure most of all.</span>
-<span class="s1">     The greatest teacher, failure is.</span>
-<span class="s1">     Luke, we are what they grow beyond.</span>
-<span class="s1">     That is the true burden of all masters.&quot;</span>
-<span class="s1">     — Master Yoda&#39;&#39;&#39;</span><span class="p">)</span>
+<p>tags: <a href="http://eliezerfb.eti.br/tag/python.html">python</a> <a href="http://eliezerfb.eti.br/tag/twitter.html">twitter</a> <a href="http://eliezerfb.eti.br/tag/dicas.html">dicas</a> </p>
+</footer><!-- /.post-info --><p>Neste exemplo vou mostrar como extrair dados do Twitter com o Python com a biblioteca <strong>python-twitter</strong>.  </p>
+<h1>Criar o Aplicativo no Twitter</h1>
+<p>O aplicativo no Twitter é necessário para realizar a autenticação no serviço, nada mais é que um conjunto de chaves que garantem a sua identificação.
+1) Acesse o <a href="https://apps.twitter.com/">Twitter Apps</a> com a sua conta no Twitter;<br>
+2) Clique na opção "Create New App" e digite os dados obrigatórios (Nome, Descrição e Site). Marque também a opção que você concorda com os termos do serviço;<br>
+3) Concluído o seu aplicativo vai estar disponível na tela principal, clique nele para abrir;<br>
+4) Clique em “Generate My Access Token and Token Secret”
+5) Na seção “Keys and Access Tokens” você vai encontrar os dados de autenticação (Consumer Key, Consumer Secret, Access Token, Access Token) Secret.  </p>
+<p>Lembre-se que estes dados são privados de sua conta no Twitter, nunca divulgue-os.</p>
+<h1>Instalação da biblioteca python-twitter</h1>
+<p>Vamos utilizar a biblioteca <a href="https://github.com/bear/python-twitter">python-twitter</a>, caso precisar você pode ler sua <a href="https://python-twitter.readthedocs.io/en/latest/">documentação</a>. Esta biblioteca é baseada na <a href="https://developer.twitter.com/en/docs">API do Twitter</a>.  </p>
+<h1>Criando um arquivo de configuração</h1>
+<p>Como não podemos manter os tokens diretamente no código, vamos criar um arquivo tokens.json, com a seguinte estrutura:</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;consumer_key&quot;</span> <span class="p">:</span> <span class="s2">&quot;seu_consumer_key&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;consumer_secret&quot;</span> <span class="p">:</span> <span class="s2">&quot;seu_consumer_secret&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;access_token_key&quot;</span> <span class="p">:</span> <span class="s2">&quot;seu_access_token_key&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;access_token_secret&quot;</span> <span class="p">:</span> <span class="s2">&quot;seu_access_token_secret&quot;</span>
+<span class="p">}</span>
 </pre></div>
 
 
-<h1>True ou False?</h1>
-<p>Quando uma string é vazia ela retorna False e True quando está preenchida.</p>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;May the Force be with you.&quot;</span>
-<span class="k">if</span> <span class="n">s</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Tem conteúdo!&quot;</span><span class="p">)</span>
-
-<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Está vazio&quot;</span><span class="p">)</span>
+<h1>Acessando a API do Twitter</h1>
+<p>1) Crie um arquivo .py e importe a biblioteca do twitter e json:  </p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">twitter</span>
+<span class="kn">import</span> <span class="nn">json</span>
 </pre></div>
 
 
-<h1>Adição e multiplicação de Strings</h1>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39; the &#39;</span>
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Fell&#39;</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s1">&#39;Force.&#39;</span><span class="p">)</span>
+<p>2) Carregue o arquivo de configuração:  </p>
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;tokens.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 
 
-<p><code>Fell the Force.</code></p>
-<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+<p>3) Agora é só carregar a API do Twitter, utilizando os dados do arquivo json:  </p>
+<div class="highlight"><pre><span></span><span class="n">api</span> <span class="o">=</span> <span class="n">twitter</span><span class="o">.</span><span class="n">Api</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 
 
-<p><code>**************************************************</code></p>
-<h1>Interpolação de Strings</h1>
-<h2>Utilizando %</h2>
-<p>É a forma mais antiga. Não é muito usado atualmente.</p>
-<div class="highlight"><pre><span></span><span class="n">j</span> <span class="o">=</span> <span class="s1">&#39;Jedi&#39;</span>
-<span class="n">f</span> <span class="o">=</span> <span class="s1">&#39;Force&#39;</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">j</span><span class="p">)</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A </span><span class="si">%s</span><span class="s2"> uses the </span><span class="si">%s</span><span class="s2"> for knowledge and defense, never for attack.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A </span><span class="si">%(x)s</span><span class="s2"> uses the </span><span class="si">%(y)s</span><span class="s2"> for knowledge and defense, never for attack.&quot;</span> <span class="o">%</span> <span class="p">({</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">j</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">f</span><span class="p">}))</span>
-
-<span class="s1">&#39;A Jedi uses the Force for knowledge and defense, never for attack.&#39;</span>
+<p>Pronto! Agora vamos testar se tudo está certo:  </p>
+<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">VerifyCredentials</span><span class="p">())</span>
 </pre></div>
 
 
-<h2>Utilizando .format()</h2>
-<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;A {} uses the {} for knowledge and defense, never for attack.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A {x} uses the {y} for knowledge and defense, never for attack.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">j</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">f</span><span class="p">))</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;A {0} uses the {1} for knowledge and defense, never for attack.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
-
-<span class="s1">&#39;A Jedi uses the Force for knowledge and defense, never for attack.&#39;</span>
+<p>Caso tiver alguma credencial errada, o resultado será:  </p>
+<div class="highlight"><pre><span></span><span class="n">twitter</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">TwitterError</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Could not authenticate you.&#39;</span><span class="p">}]</span>
 </pre></div>
 
 
-<h2>Utilizando f-strings</h2>
-<p>A partir do Python 3.6, onde você pode utilizar as variáveis diretamente dentro da String.</p>
-<div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;A {j} uses the {f} for knowledge and defense, never for attack.&quot;</span><span class="p">)</span>
-<span class="s1">&#39;A Jedi uses the Force for knowledge and defense, never for attack.&#39;</span>
-
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;A {j.upper()} uses the {f.upper()} for knowledge and defense, never for attack.&quot;</span><span class="p">)</span>
-<span class="s1">&#39;A JEDI uses the FORCE for knowledge and defense, never for attack.&#39;</span>
+<h1>Realizando buscas no Twitter</h1>
+<p>A API do Twitter permite fazer diversos tipos de consultas. O retorno dessas consultas pode ser acessado facilmente.
+Vamos criar uma função que, a partir de uma lista de status, mostra o nome do usuário e o texto do twitter.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_status</span><span class="p">(</span><span class="n">status_list</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">status_list</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">text</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 
 
-<h1>Inspeção de Conteúdo</h1>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Feel the Force&quot;</span>
-
-<span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="mi">14</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Feel&#39;</span><span class="p">)</span>
-<span class="bp">True</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;Force&#39;</span><span class="p">)</span>
-<span class="bp">True</span>
-
-<span class="s2">&quot;the&quot;</span> <span class="ow">in</span> <span class="n">s</span>
-<span class="bp">True</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Force&#39;</span><span class="p">)</span>
-<span class="mi">9</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;the&#39;</span><span class="p">)</span>
-<span class="mi">5</span>
+<p>Poderíamos extrair outros dados, porém neste exemplo vamos restringir a apenas estes.  </p>
+<h2>Busca na timeline de um usuário</h2>
+<p>Podemos buscar todos os tweets de um da Timeline de um usuário:</p>
+<div class="highlight"><pre><span></span><span class="n">status_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">GetUserTimeline</span><span class="p">(</span><span class="n">screen_name</span><span class="o">=</span><span class="s1">&#39;RosieDaSerenata&#39;</span><span class="p">)</span>
+<span class="n">print_status</span><span class="p">(</span><span class="n">status_list</span><span class="o">=</span><span class="n">status_list</span><span class="p">)</span>
 </pre></div>
 
 
-<h1>Slicing</h1>
-<p>Dividindo strings</p>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Patience you must have my young Padawan.&#39;</span>
-
-<span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="s1">&#39;P&#39;</span>
-
-<span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
-<span class="s1">&#39;Patience&#39;</span>
-
-<span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-<span class="s1">&#39;n&#39;</span>
-
-<span class="n">s</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="s1">&#39;.nawadaP gnuoy ym evah tsum uoy ecneitaP&#39;</span>
+<h2>Busca por termos</h2>
+<p>Ou fazer a busca por um termo específico, restringindo a quantidade de tweets, linguagem e mostrando apenas os mais recentes:  </p>
+<div class="highlight"><pre><span></span><span class="n">status_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">GetSearch</span><span class="p">(</span><span class="n">term</span><span class="o">=</span><span class="s2">&quot;Operação Serenata de Amor&quot;</span><span class="p">,</span>
+                            <span class="n">lang</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">,</span>
+                            <span class="n">count</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                            <span class="n">result_type</span><span class="o">=</span><span class="s1">&#39;recent&#39;</span><span class="p">)</span>
+<span class="n">print_status</span><span class="p">(</span><span class="n">status_list</span><span class="o">=</span><span class="n">status_list</span><span class="p">)</span>
 </pre></div>
 
 
-<h1>Transformação</h1>
-<div class="highlight"><pre><span></span><span class="s1">&#39;fell the force.&#39;</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
-<span class="s1">&#39;Fell The Force.&#39;</span>
-
-<span class="s1">&#39;fell the force.&#39;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
-<span class="s1">&#39;Fell the force.&#39;</span>
-
-<span class="s1">&#39;fell the force.&#39;</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-<span class="s1">&#39;FELL THE FORCE.&#39;</span>
-
-<span class="s1">&#39;FELL THE FORCE.&#39;</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-<span class="s1">&#39;fell the force.&#39;</span>
-
-<span class="s1">&#39;Fell The Force.&#39;</span><span class="o">.</span><span class="n">swapcase</span><span class="p">()</span>
-<span class="s1">&#39;fELL tHE fORCE.&#39;</span>
-
-<span class="s1">&#39;fell the force.&#39;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;force&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span>
-<span class="s1">&#39;fell the *.&#39;</span>
-
-<span class="s1">&#39;   fell the force.   &#39;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-<span class="s1">&#39;fell the force.&#39;</span>
-
-<span class="s1">&#39;   fell the force.   &#39;</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
-<span class="s1">&#39;fell the force.   &#39;</span>
-
-<span class="s1">&#39;   fell the force.   &#39;</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-<span class="s1">&#39;   fell the force.&#39;</span>
-
-<span class="s1">&#39;42&#39;</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="s1">&#39;0000000042&#39;</span>
+<h2>Busca georreferenciada</h2>
+<p>E ainda buscar tweets que estão georreferenciados:  </p>
+<div class="highlight"><pre><span></span><span class="n">status_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">GetSearch</span><span class="p">(</span><span class="n">geocode</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">27.231700</span><span class="p">,</span> <span class="o">-</span><span class="mf">52.023781</span><span class="p">,</span> <span class="s2">&quot;2km&quot;</span><span class="p">))</span>
+<span class="n">print_status</span><span class="p">(</span><span class="n">status_list</span><span class="o">=</span><span class="n">status_list</span><span class="p">)</span>
 </pre></div>
 
 
-<h1>Listas e Strings</h1>
-<h2>De lista para string</h2>
-<div class="highlight"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Do.&#39;</span><span class="p">,</span> <span class="s1">&#39;Or&#39;</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="s1">&#39;not.&#39;</span><span class="p">,</span> <span class="s1">&#39;There&#39;</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="s1">&#39;try.&#39;</span><span class="p">]</span>
-<span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-<span class="s1">&#39;Do. Or do not. There is no try.&#39;</span>
+<h1>Também é possível postar uma atualização</h1>
+<p>E é bem simples:  </p>
+<div class="highlight"><pre><span></span><span class="n">status</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">PostUpdate</span><span class="p">(</span><span class="s1">&#39;Testing python-twitter!!&#39;</span><span class="p">)</span>
 </pre></div>
 
 
-<h2>De String para lista</h2>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Do. Or do not. There is no try.&#39;</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-<span class="p">[</span><span class="s1">&#39;Do.&#39;</span><span class="p">,</span> <span class="s1">&#39;Or&#39;</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="s1">&#39;not.&#39;</span><span class="p">,</span> <span class="s1">&#39;There&#39;</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="s1">&#39;try.&#39;</span><span class="p">]</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">[</span><span class="s1">&#39;Do.&#39;</span><span class="p">,</span> <span class="s1">&#39;Or do not. There is no try.&#39;</span><span class="p">]</span>
-
-<span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-<span class="p">[</span><span class="s1">&#39;Do&#39;</span><span class="p">,</span> <span class="s1">&#39; Or do not&#39;</span><span class="p">,</span> <span class="s1">&#39; There is no try&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
-</pre></div>
-
-
-<h1>Iterar uma String</h1>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Truly wonderful, the mind of a child is.&#39;</span>
-<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-</pre></div>
-
-
-<p>T<br>
-r<br>
-u<br>
-l<br>
-y  </p>
-<p>w<br>
-o<br>
-n<br>
-d<br>
-e<br>
-r<br>
-f<br>
-u<br>
-l<br>
-,  </p>
-<p>t<br>
-h<br>
-e  </p>
-<p>m<br>
-i<br>
-n<br>
-d  </p>
-<p>o<br>
-f  </p>
-<p>a  </p>
-<p>c<br>
-h<br>
-i<br>
-l<br>
-d  </p>
-<p>i<br>
-s<br>
-.  </p>
-<p><a href="https://github.com/eliezerfb/python_tests/blob/master/manipulacao_strings/Manipula%C3%A7%C3%A3o%20de%20Strings.ipynb" target="_blank">Estes exemplos também estão disponíveis em meu repositório do GitHub</a></p>                </article>
+<h1>E o que eu faço com isso?</h1>
+<p>As redes sociais são fontes valiosas de dados não estruturados para serem usados em Data Science, sendo um ótimo assunto para um próximo post!</p>
+<p>O código completo você pode ver no <a href="https://github.com/eliezerfb/python_tests/tree/master/twitter">GitHub</a>.</p>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
@@ -258,8 +139,8 @@ s<br>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://eliezerfb.eti.br/dicas-twitter.html" rel="bookmark"
-                           title="Permalink to Python e Twitter">Python e Twitter</a></h1>
+                    <h1><a href="http://eliezerfb.eti.br/dicas-strings.html" rel="bookmark"
+                           title="Permalink to Dicas de manipulação de Strings em Python">Dicas de manipulação de Strings em Python</a></h1>
                 </header>
 
                 <div class="entry-content">
@@ -276,9 +157,9 @@ s<br>
                 By                         <a class="url fn" href="http://eliezerfb.eti.br/author/eliezer.html">Eliézer</a>
         </address>
 <p>In <a href="http://eliezerfb.eti.br/category/python.html">Python</a>.</p>
-<p>tags: <a href="http://eliezerfb.eti.br/tag/python.html">python</a> <a href="http://eliezerfb.eti.br/tag/twitter.html">twitter</a> <a href="http://eliezerfb.eti.br/tag/dicas.html">dicas</a> </p>
-</footer><!-- /.post-info -->                <p>Algumas dicas de como extrair dados do Twitter com Python</p>
-                <a class="readmore" href="http://eliezerfb.eti.br/dicas-twitter.html">read more</a>
+<p>tags: <a href="http://eliezerfb.eti.br/tag/python.html">python</a> <a href="http://eliezerfb.eti.br/tag/strings.html">strings</a> <a href="http://eliezerfb.eti.br/tag/dicas.html">dicas</a> </p>
+</footer><!-- /.post-info -->                <p>Algumas dicas de manipulação de Strings em python</p>
+                <a class="readmore" href="http://eliezerfb.eti.br/dicas-strings.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->
