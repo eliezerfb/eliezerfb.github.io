@@ -1,6 +1,6 @@
 Title: Python e Twitter
-Date: 2018-04-21 19:23
-Modified: 2018-04-21 19:23
+Date: 2018-05-20 09:06
+Modified: 2018-05-20 09:06
 Category: Python
 Tags: python, twitter, dicas 
 Slug: dicas-twitter
