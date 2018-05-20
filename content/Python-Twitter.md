@@ -11,11 +11,11 @@ Summary: Algumas dicas de como extrair dados do Twitter com Python
 Neste exemplo vou mostrar como extrair dados do Twitter com o Python com a biblioteca **python-twitter**.  
 
 # Criar o Aplicativo no Twitter
-O aplicativo no Twitter é necessário para realizar a autenticação no serviço, nada mais é que um conjunto de chaves que garantem a sua identificação.
+O aplicativo no Twitter é necessário para realizar a autenticação no serviço, nada mais é que um conjunto de chaves que garantem a sua identificação.  
 1) Acesse o [Twitter Apps](https://apps.twitter.com/) com a sua conta no Twitter;  
 2) Clique na opção "Create New App" e digite os dados obrigatórios (Nome, Descrição e Site). Marque também a opção que você concorda com os termos do serviço;  
 3) Concluído o seu aplicativo vai estar disponível na tela principal, clique nele para abrir;  
-4) Clique em “Generate My Access Token and Token Secret”
+4) Clique em “Generate My Access Token and Token Secret”;  
 5) Na seção “Keys and Access Tokens” você vai encontrar os dados de autenticação (Consumer Key, Consumer Secret, Access Token, Access Token) Secret.  
 
 Lembre-se que estes dados são privados de sua conta no Twitter, nunca divulgue-os.
